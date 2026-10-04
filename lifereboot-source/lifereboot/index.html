@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>LifeReboot</title>
+<style>
+:root{
+  --bg:#12151c; --panel:#1a1f2b; --panel2:#20263440; --card:#212836; --line:#2e3646;
+  --ink:#e8ecf3; --sub:#8b96a8; --accent:#e0b04f; --accent2:#f5d38a;
+  --green:#3dbd7d; --red:#e05656; --blue:#5b8def; --purple:#9d7bea;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Microsoft YaHei","PingFang SC","Segoe UI",sans-serif;background:var(--bg);color:var(--ink);height:100vh;overflow:hidden;display:flex;}
+::-webkit-scrollbar{width:9px;height:9px;}
+::-webkit-scrollbar-thumb{background:#333d50;border-radius:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+
+/* ===== 侧边导航 ===== */
+nav{width:200px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;}
+.logo{padding:22px 18px 10px;}
+.logo h1{font-size:17px;color:var(--accent2);letter-spacing:1px;}
+.logo p{font-size:11px;color:var(--sub);margin-top:3px;}
+.langbar{padding:4px 18px 10px;display:flex;gap:6px;}
+.langbtn{flex:1;background:#171c27;border:1px solid var(--line);color:var(--sub);border-radius:7px;padding:5px 0;font-size:12px;cursor:pointer;font-weight:normal;}
+.langbtn.active{background:#3a2a12;border-color:var(--accent);color:var(--accent2);}
+.navlist{flex:1;padding:6px 10px;}
+.navitem{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:9px;cursor:pointer;color:var(--sub);font-size:13.5px;margin-bottom:4px;user-select:none;}
+.navitem:hover{background:#242c3c;color:var(--ink);}
+.navitem.active{background:linear-gradient(90deg,#2b2417,#242c3c);color:var(--accent2);font-weight:bold;}
+.navitem .ico{width:20px;text-align:center;}
+.navfoot{padding:12px 16px;border-top:1px solid var(--line);font-size:11px;color:var(--sub);line-height:1.6;}
+.combo-badge{display:inline-block;background:#3a2a12;color:var(--accent);border-radius:6px;padding:1px 7px;font-weight:bold;}
+
+/* ===== 主区 ===== */
+main{flex:1;overflow-y:auto;padding:26px 32px 60px;}
+.page{display:none;max-width:980px;margin:0 auto;}
+.page.active{display:block;}
+h2.pt{font-size:21px;margin-bottom:4px;}
+p.pd{color:var(--sub);font-size:13px;margin-bottom:20px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:16px;}
+.card h3{font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.card h3 .tag{font-size:11px;color:var(--sub);font-weight:normal;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+label.f{display:block;font-size:12px;color:var(--sub);margin:10px 0 5px;}
+textarea,input[type=text],input[type=date],select{width:100%;background:#171c27;border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:9px 11px;font-size:13.5px;font-family:inherit;resize:vertical;}
+textarea:focus,input:focus,select:focus{outline:none;border-color:var(--accent);}
+button{background:var(--accent);color:#241a05;border:none;border-radius:8px;padding:9px 18px;font-size:13.5px;font-weight:bold;cursor:pointer;font-family:inherit;}
+button:hover{background:var(--accent2);}
+button.ghost{background:transparent;color:var(--sub);border:1px solid var(--line);}
+button.ghost:hover{color:var(--ink);border-color:var(--sub);}
+button.danger{background:transparent;color:var(--red);border:1px solid #4a2530;}
+button.sm{padding:5px 12px;font-size:12.5px;}
+.muted{color:var(--sub);font-size:12.5px;}
+.ok{color:var(--green);} .bad{color:var(--red);}
+
+/* ===== 身份宣言横幅 ===== */
+.banner{background:linear-gradient(135deg,#2b2312,#1c2431 70%);border:1px solid #4a3d1e;border-radius:14px;padding:18px 22px;margin-bottom:16px;}
+.banner h3{color:var(--accent2);font-size:13px;letter-spacing:2px;margin-bottom:8px;}
+.banner .line{font-size:15px;line-height:1.9;}
+.banner .dim{color:var(--accent);font-weight:bold;margin-right:6px;}
+
+/* ===== 今日任务 ===== */
+.task{display:flex;align-items:center;gap:12px;background:#171c27;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.task .chk{width:22px;height:22px;border-radius:7px;border:2px solid #3d4656;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;}
+.task.done .chk{background:var(--green);border-color:var(--green);}
+.task.done .txt{text-decoration:line-through;color:var(--sub);}
+.task .txt{flex:1;font-size:14px;}
+.task .pomo{font-size:12px;color:var(--purple);white-space:nowrap;}
+.empty{color:var(--sub);font-size:13px;text-align:center;padding:18px;border:1px dashed var(--line);border-radius:10px;}
+
+/* ===== 番茄钟 ===== */
+.pomo-box{text-align:center;}
+.pomo-time{font-size:52px;font-weight:bold;font-variant-numeric:tabular-nums;letter-spacing:2px;margin:6px 0;color:var(--ink);}
+.pomo-time.break{color:var(--green);}
+.pomo-state{font-size:12px;color:var(--sub);}
+.pomo-btns{margin-top:12px;display:flex;gap:10px;justify-content:center;}
+.pomo-dots{margin-top:10px;font-size:16px;letter-spacing:6px;color:var(--purple);}
+.pomo-dots .lit{color:var(--accent);}
+select.pomo-target{max-width:240px;margin:0 auto;display:block;}
+
+/* ===== 金字塔 ===== */
+.pyr-year{background:linear-gradient(135deg,#31284f,#1c2431);border:1px solid #4a3f75;border-radius:14px;padding:18px 22px;margin-bottom:14px;}
+.pyr-year h3{color:#c9b8f5;font-size:13px;letter-spacing:2px;margin-bottom:6px;}
+.pyr-year .gtxt{font-size:17px;font-weight:bold;line-height:1.6;}
+.monthrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.mchip{padding:6px 11px;border-radius:8px;font-size:12.5px;background:#171c27;border:1px solid var(--line);color:var(--sub);cursor:pointer;}
+.mchip.cur{background:#3a2a12;border-color:var(--accent);color:var(--accent2);font-weight:bold;}
+.mchip.done{background:#12291f;border-color:#1e5c40;color:var(--green);}
+
+/* ===== 热力图 ===== */
+.heatmap{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,13px);gap:3px;overflow-x:auto;padding-bottom:6px;}
+.hm-cell{display:inline-block;width:13px;height:13px;border-radius:3px;background:#1b2130;}
+.hm-cell.l1{background:#1e4d38;} .hm-cell.l2{background:#2b7a54;} .hm-cell.l3{background:#3dbd7d;}
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;text-align:center;}
+.stat .v{font-size:24px;font-weight:bold;color:var(--accent2);}
+.stat .k{font-size:12px;color:var(--sub);margin-top:2px;}
+.review-item{border-left:3px solid #3a465c;padding:10px 14px;background:#171c27;border-radius:0 10px 10px 0;margin-bottom:10px;}
+.review-item .d{font-size:12px;color:var(--accent);margin-bottom:6px;}
+.review-item .a{font-size:13.5px;margin-bottom:4px;}
+
+/* ===== 引导流程 ===== */
+#onboard{position:fixed;inset:0;background:#0e1118f5;z-index:50;display:none;overflow-y:auto;padding:40px 20px;}
+#onboard.show{display:block;}
+.ob-card{max-width:640px;margin:20px auto;background:var(--panel);border:1px solid #3a4152;border-radius:16px;padding:34px 38px;}
+.ob-step{font-size:12px;color:var(--accent);letter-spacing:2px;margin-bottom:8px;}
+.ob-card h2{font-size:20px;margin-bottom:10px;}
+.ob-card p{color:var(--sub);font-size:13.5px;margin-bottom:14px;line-height:1.8;}
+.ob-nav{display:flex;justify-content:space-between;margin-top:22px;}
+.warnbox{background:#2b1518;border:1px solid #58242c;color:#f0a5a5;border-radius:8px;padding:8px 12px;font-size:12.5px;margin-top:6px;display:none;}
+.chkline{display:flex;align-items:flex-start;gap:8px;font-size:13px;margin:5px 0;color:var(--ink);}
+.chkline input{margin-top:4px;}
+
+/* ===== 弹窗 ===== */
+#modal{position:fixed;inset:0;background:#000a;z-index:60;display:none;align-items:center;justify-content:center;}
+#modal.show{display:flex;}
+.modal-card{background:var(--panel);border:1px solid #3a4152;border-radius:14px;padding:26px 30px;width:520px;max-height:82vh;overflow-y:auto;}
+.modal-card h3{margin-bottom:14px;font-size:16px;}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#2b3345;color:var(--ink);padding:11px 22px;border-radius:10px;font-size:13.5px;z-index:99;display:none;box-shadow:0 6px 24px #000a;max-width:70vw;}
+.toast.show{display:block;animation:fadein .2s;}
+@keyframes fadein{from{opacity:0;transform:translate(-50%,8px);}to{opacity:1;transform:translate(-50%,0);}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <h1>🔄 LifeReboot</h1>
+    <p data-i18n="app.subtitle">人生重启 · 目标追踪</p>
+  </div>
+  <div class="langbar">
+    <button class="langbtn" id="langZh" onclick="setLang('zh')">中文</button>
+    <button class="langbtn" id="langEn" onclick="setLang('en')">English</button>
+  </div>
+  <div class="navlist" id="navlist">
+    <div class="navitem active" data-page="today"><span class="ico">🧭</span><span data-i18n="nav.today">今日驾驶舱</span></div>
+    <div class="navitem" data-page="goal"><span class="ico">🎯</span><span data-i18n="nav.goal">目标金字塔</span></div>
+    <div class="navitem" data-page="vision"><span class="ico">🪞</span><span data-i18n="nav.vision">愿景与魔镜</span></div>
+    <div class="navitem" data-page="review"><span class="ico">📖</span><span data-i18n="nav.review">复盘档案</span></div>
+    <div class="navitem" data-page="support"><span class="ico">🤝</span><span data-i18n="nav.support">支撑体系</span></div>
+    <div class="navitem" data-page="settings"><span class="ico">⚙️</span><span data-i18n="nav.settings">设置</span></div>
+  </div>
+  <div class="navfoot"><span data-i18n="nav.streak">连击</span> <span class="combo-badge" id="navCombo">0</span> <span data-i18n="nav.days">天</span><br><span data-i18n="nav.motto">靠系统，不靠意志力</span></div>
+</nav>
+
+<main>
+  <!-- ============ 今日驾驶舱 ============ -->
+  <div class="page active" id="page-today">
+    <div class="banner" id="idBanner"></div>
+    <div class="grid2">
+      <div>
+        <div class="card">
+          <h3>✅ <span data-i18n="today.tasks">今日关键事</span> <span class="tag" data-i18n="today.tasksTag">每天最多 3 件 · 高价值、不可替代</span></h3>
+          <div id="taskList"></div>
+          <div style="display:flex;gap:8px;margin-top:10px;" id="taskAddRow">
+            <input type="text" id="taskInput" data-i18n-ph="today.taskPh" placeholder="围绕当月重点项目，写下今天的关键事…" style="flex:1;">
+            <button class="sm" data-i18n="btn.add" onclick="addTask()">添加</button>
+          </div>
+          <p class="muted" style="margin-top:8px;" data-i18n="today.tip">💡 刷视频、看资讯等低价值的事永远不要列入。</p>
+        </div>
+        <div class="card">
+          <h3>🌅 <span data-i18n="today.morning">晨间仪式</span> <span class="tag" data-i18n="today.morningTag">5 分钟 · 起床后不立刻刷手机</span></h3>
+          <div id="morningBox"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card pomo-box">
+          <h3 style="justify-content:center;">🍅 <span data-i18n="today.pomo">番茄专注</span></h3>
+          <select class="pomo-target" id="pomoTarget"></select>
+          <div class="pomo-time" id="pomoTime">25:00</div>
+          <div class="pomo-state" id="pomoState"></div>
+          <div class="pomo-dots" id="pomoDots">○○○○</div>
+          <div class="pomo-btns">
+            <button id="pomoBtn" onclick="pomoToggle()"></button>
+            <button class="ghost" data-i18n="btn.reset" onclick="pomoReset()">重置</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🌙 <span data-i18n="today.review">晚间复盘</span> <span class="tag" data-i18n="today.reviewTag">10 分钟 · 复盘不是自责，是总结</span></h3>
+          <div id="reviewBox"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 目标金字塔 ============ -->
+  <div class="page" id="page-goal">
+    <h2 class="pt" data-i18n="goal.title">目标金字塔</h2>
+    <p class="pd" data-i18n="goal.desc">少而精：1 条年核心目标 → 12 个月度项目 → 每日 2-3 件关键事。贪多求全是混乱的根源。</p>
+    <div class="pyr-year" id="yearBox"></div>
+    <div class="card">
+      <h3>📅 <span data-i18n="goal.months">月度项目（Boss 战）</span></h3>
+      <div class="monthrow" id="monthRow"></div>
+      <div id="monthDetail"></div>
+    </div>
+  </div>
+
+  <!-- ============ 愿景与魔镜 ============ -->
+  <div class="page" id="page-vision">
+    <h2 class="pt" data-i18n="vision.title">愿景与魔镜</h2>
+    <p class="pd" data-i18n="vision.desc">身份先于行为。宣言必须第一人称、现在时态——不是"我想成为"，而是"我就是"。</p>
+    <div class="card">
+      <h3>🪪 <span data-i18n="vision.identity">身份宣言</span> <span class="tag" data-i18n="vision.identityTag">五个维度 · 每维度 1-2 句</span></h3>
+      <div class="grid5" id="idEditor"></div>
+      <div style="margin-top:14px;"><button class="sm" data-i18n="btn.saveIdentity" onclick="saveIdentity()">保存身份宣言</button></div>
+      <div class="warnbox" id="idWarn" data-i18n="vision.warn"></div>
+    </div>
+    <div class="card">
+      <h3>🪞 <span data-i18n="vision.antivision">反向愿景（魔镜）</span> <span class="tag" data-i18n="vision.avTag">如果我不变，5 年后的我会是什么样</span></h3>
+      <p class="muted" style="margin-bottom:10px;" data-i18n="vision.avDesc"></p>
+      <div class="grid5" id="avEditor"></div>
+      <div style="margin-top:14px;"><button class="sm" data-i18n="btn.saveMirror" onclick="saveAntiVision()">保存魔镜卡</button></div>
+    </div>
+    <div class="card" id="mirrorCard" style="display:none;">
+      <h3>⚖️ <span data-i18n="vision.mirror">魔镜对照</span></h3>
+      <p class="muted" style="margin-bottom:8px;" data-i18n="vision.mirrorDesc"></p>
+      <div class="grid2" id="mirrorBox"></div>
+    </div>
+  </div>
+
+  <!-- ============ 复盘档案 ============ -->
+  <div class="page" id="page-review">
+    <h2 class="pt" data-i18n="archive.title">复盘档案</h2>
+    <p class="pd" data-i18n="archive.desc">你不需要和别人比，只需要和昨天的自己比。</p>
+    <div class="statrow" id="statRow"></div>
+    <div class="card">
+      <h3>🔥 <span data-i18n="archive.heatmap">打卡热力图</span> <span class="tag" data-i18n="archive.hmTag">绿色越亮 = 完成越好</span></h3>
+      <div class="heatmap" id="heatmap"></div>
+      <div style="display:flex;gap:14px;margin-top:10px;font-size:11.5px;color:var(--sub);align-items:center;">
+        <span data-i18n="archive.less">少</span>
+        <span class="hm-cell"></span><span class="hm-cell l1"></span><span class="hm-cell l2"></span><span class="hm-cell l3"></span>
+        <span data-i18n="archive.more">多</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>📚 <span data-i18n="archive.records">复盘记录</span></h3>
+      <div id="reviewHistory"></div>
+    </div>
+  </div>
+
+  <!-- ============ 支撑体系 ============ -->
+  <div class="page" id="page-support">
+    <h2 class="pt" data-i18n="support.title">支撑体系</h2>
+    <p class="pd" data-i18n="support.desc">意志力有限，靠系统坚持的事，会自然而然融入生活。主动选择环境，而不是被环境左右。</p>
+    <div class="card">
+      <h3>🤝 <span data-i18n="support.partner">问责伙伴</span> <span class="tag" data-i18n="support.partnerTag">有共同目标、能互相监督、互相鼓励的人</span></h3>
+      <div class="grid2">
+        <div><label class="f" data-i18n="support.ptName">伙伴姓名</label><input type="text" id="ptName"></div>
+        <div><label class="f" data-i18n="support.ptContact">联系方式 / 打卡群</label><input type="text" id="ptContact"></div>
+      </div>
+      <label class="f" data-i18n="support.ptRules">监督规则</label>
+      <textarea id="ptRules" rows="3"></textarea>
+      <div style="margin-top:12px;"><button class="sm" data-i18n="btn.save" onclick="savePartner()">保存</button></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>🧹 <span data-i18n="support.envNeg">清理负面环境</span> <span class="tag" data-i18n="support.envNegTag">远离消耗你的人与事</span></h3>
+        <div id="envNeg"></div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <input type="text" id="envNegInput" data-i18n-ph="support.envNegPh" style="flex:1;">
+          <button class="sm ghost" data-i18n="btn.addSm" onclick="addEnv('neg')">添加</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>🌱 <span data-i18n="support.envPos">打造正向环境</span> <span class="tag" data-i18n="support.envPosTag">靠近滋养你目标的人与物</span></h3>
+        <div id="envPos"></div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <input type="text" id="envPosInput" data-i18n-ph="support.envPosPh" style="flex:1;">
+          <button class="sm ghost" data-i18n="btn.addSm" onclick="addEnv('pos')">添加</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🎁 <span data-i18n="support.rewards">奖励机制</span> <span class="tag" data-i18n="support.rwTag">小进步小奖励，大进步大奖励</span></h3>
+      <div class="grid2">
+        <div><label class="f" data-i18n="support.rwDaily">日奖励（完成一天关键事）</label><input type="text" id="rwDaily"></div>
+        <div><label class="f" data-i18n="support.rwMonthly">月奖励（完成月度项目）</label><input type="text" id="rwMonthly"></div>
+      </div>
+      <label class="f" data-i18n="support.rwPenalty">惩罚机制（未完成的代价）</label>
+      <input type="text" id="rwPenalty">
+      <div style="margin-top:12px;"><button class="sm" data-i18n="btn.save" onclick="saveRewards()">保存</button></div>
+    </div>
+  </div>
+
+  <!-- ============ 设置 ============ -->
+  <div class="page" id="page-settings">
+    <h2 class="pt" data-i18n="settings.title">设置</h2>
+    <p class="pd" data-i18n="settings.desc">数据 100% 存储在本机，不联网、不上传。</p>
+    <div class="card">
+      <h3>💾 <span data-i18n="settings.backup">数据备份</span></h3>
+      <p class="muted" style="margin-bottom:12px;" data-i18n="settings.backupDesc"></p>
+      <div style="display:flex;gap:10px;">
+        <button data-i18n="btn.export" onclick="exportData()">导出备份</button>
+        <button class="ghost" data-i18n="btn.import" onclick="document.getElementById('importFile').click()">导入备份</button>
+        <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
+      </div>
+    </div>
+    <div class="card">
+      <h3>🧭 <span data-i18n="settings.guide">引导流程</span></h3>
+      <p class="muted" style="margin-bottom:12px;" data-i18n="settings.guideDesc"></p>
+      <button class="ghost" data-i18n="btn.restartGuide" onclick="restartOnboard()">重新进入引导</button>
+    </div>
+    <div class="card">
+      <h3>⚠️ <span data-i18n="settings.danger">危险操作</span></h3>
+      <p class="muted" style="margin-bottom:12px;" data-i18n="settings.dangerDesc"></p>
+      <button class="danger" data-i18n="btn.wipe" onclick="wipeAll()">清空全部数据</button>
+    </div>
+    <div class="card">
+      <h3>ℹ️ <span data-i18n="settings.about">关于</span></h3>
+      <p class="muted" id="aboutBox"></p>
+    </div>
+  </div>
+</main>
+
+<!-- ============ 引导流程 ============ -->
+<div id="onboard">
+  <div class="ob-card" id="obBody"></div>
+</div>
+
+<!-- ============ 通用弹窗 ============ -->
+<div id="modal"><div class="modal-card" id="modalBody"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================
+   i18n 字典
+===================================================== */
+const STR = {
+zh: {
+  'app.subtitle':'人生重启 · 目标追踪','app.title':'LifeReboot · 人生重启',
+  'nav.today':'今日驾驶舱','nav.goal':'目标金字塔','nav.vision':'愿景与魔镜','nav.review':'复盘档案','nav.support':'支撑体系','nav.settings':'设置',
+  'nav.streak':'连击','nav.days':'天','nav.motto':'靠系统，不靠意志力',
+  'today.tasks':'今日关键事','today.tasksTag':'每天最多 3 件 · 高价值、不可替代',
+  'today.taskPh':'围绕当月重点项目，写下今天的关键事…','btn.add':'添加','btn.addSm':'添加','btn.reset':'重置','btn.save':'保存',
+  'today.tip':'💡 刷视频、看资讯等低价值的事永远不要列入。',
+  'today.morning':'晨间仪式','today.morningTag':'5 分钟 · 起床后不立刻刷手机',
+  'today.pomo':'番茄专注','today.review':'晚间复盘','today.reviewTag':'10 分钟 · 复盘不是自责，是总结',
+  'goal.title':'目标金字塔','goal.desc':'少而精：1 条年核心目标 → 12 个月度项目 → 每日 2-3 件关键事。贪多求全是混乱的根源。','goal.months':'月度项目（Boss 战）',
+  'vision.title':'愿景与魔镜','vision.desc':'身份先于行为。宣言必须第一人称、现在时态——不是"我想成为"，而是"我就是"。',
+  'vision.identity':'身份宣言','vision.identityTag':'五个维度 · 每维度 1-2 句',
+  'vision.warn':'⚠ 检测到"我希望 / 我想要 / 我想成为"等措辞。身份不是对现状的描述，而是对未来的定义、对自己的"心理契约"——请改成现在时态。',
+  'vision.antivision':'反向愿景（魔镜）','vision.avTag':'如果我不变，5 年后的我会是什么样',
+  'vision.avDesc':'越具体、越真实、越让你感到厌恶越好。写完后认真感受情绪——恐惧、焦虑、不甘，说明你写对了。',
+  'btn.saveIdentity':'保存身份宣言','btn.saveMirror':'保存魔镜卡','vision.mirror':'魔镜对照',
+  'vision.mirrorDesc':'渴望是"拉着你往前走"，厌恶是"推着你往前走"。两种力量组合，你就拥有源源不断的行动力。',
+  'archive.title':'复盘档案','archive.desc':'你不需要和别人比，只需要和昨天的自己比。','archive.heatmap':'打卡热力图','archive.hmTag':'绿色越亮 = 完成越好',
+  'archive.less':'少','archive.more':'多','archive.records':'复盘记录',
+  'support.title':'支撑体系','support.desc':'意志力有限，靠系统坚持的事，会自然而然融入生活。主动选择环境，而不是被环境左右。',
+  'support.partner':'问责伙伴','support.partnerTag':'有共同目标、能互相监督、互相鼓励的人','support.ptName':'伙伴姓名','support.ptContact':'联系方式 / 打卡群',
+  'support.ptRules':'监督规则（每天互拍打卡、未完成接受小惩罚、每周互相复盘）',
+  'support.envNeg':'清理负面环境','support.envNegTag':'远离消耗你的人与事','support.envNegPh':'总抱怨的人 / 让你沉迷的 App…',
+  'support.envPos':'打造正向环境','support.envPosTag':'靠近滋养你目标的人与物','support.envPosPh':'关注的博主 / 桌面上的目标相关物品…',
+  'support.rewards':'奖励机制','support.rwTag':'小进步小奖励，大进步大奖励 · 奖励是催化剂不是绊脚石',
+  'support.rwDaily':'日奖励（完成一天关键事）','support.rwMonthly':'月奖励（完成月度项目）','support.rwPenalty':'惩罚机制（未完成的代价）',
+  'settings.title':'设置','settings.desc':'数据 100% 存储在本机，不联网、不上传。','settings.backup':'数据备份',
+  'settings.backupDesc':'导出为 JSON 文件保存到任意位置；换电脑时导入即可完整迁移。',
+  'btn.export':'导出备份','btn.import':'导入备份','settings.guide':'引导流程','settings.guideDesc':'重新走一遍"一天重启"引导（身份宣言 → 反向愿景 → 目标金字塔）。',
+  'btn.restartGuide':'重新进入引导','settings.danger':'危险操作','settings.dangerDesc':'清空所有本地数据（建议先导出备份）。','btn.wipe':'清空全部数据',
+  'settings.about':'关于',
+  'about':'LifeReboot（人生重启）V1.1<br>依据《行动方案》产品说明书开发。<br>身份先于行为 · 少而精 · 靠系统不靠意志力 · 把人生玩成游戏。<br><br><i>"人生从来都不是一场赛跑，而是一场旅行。重要的不是速度，而是方向；不是你走了多远，而是你是否走在正确的路上。"</i>',
+  'banner.emptyTitle':'🪪 身份宣言',
+  'banner.empty':'尚未撰写身份宣言 —— 去「愿景与魔镜」或重新引导中完成。行为只是身份的外在表现，身份没有改变，行为终究会回到原来的轨道。',
+  'banner.title':'🪪 这就是我，这就是真实的我',
+  'tasks.empty':'今天还没有关键事。<br>没有记录就没有发生。写下今天的 2-3 件关键事，开始掌舵。',
+  'rituals':'冥想 2 分钟,拉伸 2 分钟,喝一杯温水',
+  'morning.done':'✓ 今日晨间仪式已完成',
+  'morning.doneSub':'用 5 分钟把自己交给身体，再用 5 分钟写下关键事——你已经领先昨天的自己。',
+  'morning.prompt':'起床后不立刻刷手机。花 5 分钟做一件简单的事：',
+  'morning.doneBtn':'完成晨间仪式',
+  'toast.morningNeed':'至少勾选一件：冥想 / 拉伸 / 喝温水','toast.morningDone':'🌅 美好的一天从掌控开始',
+  'pomo.idleWork':'准备专注 · 工作 25 分钟 / 休息 5 分钟','pomo.idleBreak':'休息中待命','pomo.runningWork':'专注中 · 同一时间只做一件事','pomo.runningBreak':'休息一下 · 离开屏幕',
+  'pomo.startWork':'开始专注','pomo.startBreak':'开始休息','pomo.pause':'暂停',
+  'pomo.needTask':'先添加今日关键事','pomo.doneOne':'🍅 一个番茄钟完成！休息 5 分钟','pomo.doneFour':'⏰ 4 个番茄钟完成，休息 15-20 分钟，走动一下','pomo.breakOver':'休息结束，回到驾驶舱，继续下一轮专注',
+  'pomo.select':'先添加今日关键事，再开始专注','pomo.optPrefix':'🍅 ',
+  'review.done':'✓ 今日复盘已完成','review.doneSub':'明天的 2-3 件关键事已在复盘中预填，明早见。',
+  'review.q1':'1. 今天的关键事完成了吗？','review.q2':'2. 没完成的原因是什么？','review.q3':'3. 哪些事推动了核心目标？','review.q4':'4. 明天的 2-3 件关键事是什么？',
+  'review.q4Ph':'每行一件，明天打开软件会自动预填','review.doneBtn':'完成今日复盘',
+  'toast.reviewEmpty':'复盘的核心不是自责，而是总结——写点什么吧',
+  'modal.prefillTitle':'把明天装入今天',
+  'modal.prefillBody':'复盘里写下了 {n} 件明天的事，是否直接设为明天的关键事？（每天仍以 3 件为上限）',
+  'modal.no':'不用了','modal.yesPrefill':'好的，预填','toast.prefilled':'已暂存，明天打开软件会自动出现',
+  'goal.noYear':'尚未设定 —— 从五个维度中选出 1 个最核心的维度，只选 1 个。',
+  'goal.yearTag':'主线任务 · 1 年核心目标','goal.editBtn0':'设定年目标','goal.editBtn1':'修改年目标',
+  'goal.smartOk':'SMART 自检：','goal.setModal':'设定 1 年核心目标','goal.dim':'选择维度（只能选 1 个）','goal.text':'目标描述','goal.textPh':'符合 SMART 原则的一句话…',
+  'goal.smartCheck':'SMART 自检（全部勾选后再保存）','modal.cancel':'取消',
+  'toast.smartFail':'SMART 自检未全部通过，请再打磨一下这条目标','toast.goalEmpty':'目标描述不能为空',
+  'toast.goalArchived':'旧目标已归档。聚焦意味着对其他事说不。','toast.goalSaved':'主线任务已锁定：',
+  'month.curNote':'（当前月 · 必须能推动 1 年核心目标）','month.titlePh':'例如：完成 XX 的第一个版本','month.descLabel':'具体落地描述','month.descPh':'怎么算完成？拆成哪些可落地的事？',
+  'month.save':'保存','month.win':'标记 Boss 战胜利 ✓','month.unwin':'取消完成 ✓',
+  'month.label':' 月重点项目标题',
+  'toast.monthSaved':' 月项目已保存','toast.bossWin':'🏆 Boss 战胜利！记得领取你的月度奖励：','toast.noReward':'（去支撑体系设置月奖励）',
+  'id.dim.Health':'健康','id.dim.Career':'事业/学习','id.dim.Wealth':'财富','id.dim.Relations':'人际关系','id.dim.Mindset':'心态',
+  'vision.idPh':'我是一个…的人，我…','vision.avPhOverall':'还是这份做不出成果的工作，还是月光，还是把日子拖成拖延…',
+  'mirror.idTitle':'✨ 愿景 · 我就是','mirror.avTitle':'🪞 魔镜 · 我绝不变成的样子','mirror.unset':'未填写',
+  'toast.idSaved':'身份宣言已保存，大声读 3 遍：这就是我！','toast.idSavedBad':'已保存，但注意：宣言里出现了愿望式措辞',
+  'toast.avSaved':'魔镜卡已保存。所有改变，都是为了不成为镜子里那样的人。',
+  'stat.streak':'连续天数（Combo）','stat.doneTotal':'累计完成关键事','stat.pomos':'累计番茄钟','stat.reviews':'累计复盘次数',
+  'archive.empty':'还没有复盘记录。今晚 10 分钟，写下第一个总结。','archive.tomorrow':'明日：',
+  'env.empty':'暂无条目','env.remove':'移除',
+  'toast.partnerSaved':'问责伙伴已保存。有人盯着，坚持不再是孤独的事。','toast.rewardsSaved':'奖惩规则已保存——奖励要成为改变的催化剂',
+  'settings.exported':'备份已导出，请妥善保管','toast.importFail':'导入失败：文件格式不正确',
+  'modal.wipeTitle':'⚠️ 确认清空全部数据？','modal.wipeBody':'身份宣言、目标、复盘、打卡记录将全部删除，且无法恢复。建议先导出备份。','modal.wipeOk':'确认清空',
+  'ob.step1':'GUIDE · 1/5 欢迎','ob.h1':'🔄 一天重启人生',
+  'ob.p1a':'你无法靠"改变行为"修好人生，只能靠"换身份"重启人生。<br>接下来 20 分钟，我们一起完成三件事：',
+  'ob.p1b':'① <b>身份重塑</b>——定义"你想成为的人"（其实你就是）<br>② <b>反向愿景</b>——用厌恶感驱动自己前行<br>③ <b>目标聚焦</b>——锁定 1 年核心目标与本月重点项目',
+  'ob.start':'开始 →','ob.step2':'GUIDE · 2/5 身份重塑','ob.h2':'🪪 写下你的身份宣言',
+  'ob.p2':'在顶部写下"我是谁"。从五个维度各写 1-2 句，<b>必须第一人称、现在时态、坚定、符合内心真正的渴望</b>。<br>❌ "我希望自己是一个健康的人"　✅ "我是一个健康的人，我每天坚持运动。"',
+  'ob.next':'下一步 →','ob.prev':'← 上一步',
+  'toast.obNeedOne':'至少为一个维度写下身份宣言',
+  'ob.step3':'GUIDE · 3/5 反向愿景','ob.h3':'🪞 如果不变，5 年后的你',
+  'ob.p3':'对比美好未来的渴望更有力量的，是对糟糕现状的厌恶。如果你清晰地知道<b>不改变的话人生会变得多么糟糕</b>，你就会立刻拥有前行的动力。写下它，越具体越真实越好。',
+  'ob.avLabel':'5 年后不变的我（工作/财务/关系/健康/心态）',
+  'toast.avNeed':'写下来，直面它——这是动力的来源',
+  'ob.step4':'GUIDE · 4/5 目标聚焦','ob.h4':'🎯 锁定 1 年核心目标',
+  'ob.p4':'少而精。从五个维度中选出 <b>1 个最核心的维度</b>，写下符合 SMART 原则的 1 年核心目标。<b>只能选 1 个。</b>',
+  'ob.dimLabel':'维度','ob.goalLabel':'目标（具体 · 可衡量 · 可实现 · 相关 · 有时间限制）','ob.goalPh':'到 2027 年 X 月，我要…',
+  'toast.goalNeed':'写下你的核心目标，只选 1 个',
+  'ob.step5':'GUIDE · 5/5 本月 Boss 战','ob.h5':'⚔️ 本月重点项目',
+  'ob.p5':'把 1 年核心目标拆解成 12 个月度项目。写下<b>这个月</b>的重点项目——它必须能推动核心目标、具体可落地。',
+  'ob.monthLabel':' 月重点项目','ob.monthPh':'例如：完成 XX 的第一版方案','ob.finish':'🚀 进入驾驶舱',
+  'toast.rebootDone':'🚀 重启完成。从今天起，做好每天 2-3 件关键事，和昨天的自己比。',
+  'toast.maxTasks':'每天最多 3 件关键事——多一件都不行',
+  'toast.allDone':'🎉 今日关键事全部完成！日奖励：','toast.noDailyReward':'（去支撑体系设置日奖励）',
+  'modal.delete':'删',
+  'backupFile':'LifeReboot备份_'
+},
+en: {
+  'app.subtitle':'LifeReboot · Goal Tracker','app.title':'LifeReboot',
+  'nav.today':'Today Cockpit','nav.goal':'Goal Pyramid','nav.vision':'Vision & Mirror','nav.review':'Review Archive','nav.support':'Support System','nav.settings':'Settings',
+  'nav.streak':'Streak','nav.days':'days','nav.motto':'Rely on systems, not willpower',
+  'today.tasks':'Today\'s Key Tasks','today.tasksTag':'Max 3 per day · High-value & irreplaceable',
+  'today.taskPh':'Around this month\'s key project, write today\'s key tasks…','btn.add':'Add','btn.addSm':'Add','btn.reset':'Reset','btn.save':'Save',
+  'today.tip':'💡 Never list low-value items like watching videos or browsing feeds.',
+  'today.morning':'Morning Ritual','today.morningTag':'5 min · No phone right after waking up',
+  'today.pomo':'Pomodoro Focus','today.review':'Evening Review','today.reviewTag':'10 min · Review is summary, not self-blame',
+  'goal.title':'Goal Pyramid','goal.desc':'Less is more: 1 yearly core goal → 12 monthly projects → 2-3 key tasks daily. Greed breeds chaos.','goal.months':'Monthly Projects (Boss Fights)',
+  'vision.title':'Vision & Mirror','vision.desc':'Identity precedes behavior. Declarations must be first-person, present tense — not "I want to be", but "I am".',
+  'vision.identity':'Identity Declaration','vision.identityTag':'Five dimensions · 1-2 sentences each',
+  'vision.warn':'⚠ Detected wishful wording like "I hope / I want / I wish to become". Identity is not a description of the present but a definition of your future self — rewrite in present tense.',
+  'vision.antivision':'Anti-Vision (Dark Mirror)','vision.avTag':'Who will I be in 5 years if nothing changes?',
+  'vision.avDesc':'The more specific, real and repulsive, the better. Feel the emotions after writing — fear, anxiety, unwillingness mean you did it right.',
+  'btn.saveIdentity':'Save Declaration','btn.saveMirror':'Save Mirror Card','vision.mirror':'Mirror Contrast',
+  'vision.mirrorDesc':'Desire pulls you forward; disgust pushes you forward. Combine both and you have endless drive.',
+  'archive.title':'Review Archive','archive.desc':'You don\'t need to compare with others — only with yesterday\'s self.','archive.heatmap':'Check-in Heatmap','archive.hmTag':'Brighter green = better completion',
+  'archive.less':'Less','archive.more':'More','archive.records':'Review Records',
+  'support.title':'Support System','support.desc':'Willpower is limited. What systems sustain becomes part of life. Choose your environment actively.',
+  'support.partner':'Accountability Partner','support.partnerTag':'Someone sharing your goal who checks and encourages','support.ptName':'Partner name','support.ptContact':'Contact / check-in group',
+  'support.ptRules':'Rules (daily mutual check-ins, small penalty if failed, weekly review together)',
+  'support.envNeg':'Clean Negative Environment','support.envNegTag':'Stay away from people & things that drain you','support.envNegPh':'Complainers / addictive apps…',
+  'support.envPos':'Build Positive Environment','support.envPosTag':'Get close to people & things that feed your goal','support.envPosPh':'Bloggers to follow / goal-related items on desk…',
+  'support.rewards':'Reward Mechanism','support.rwTag':'Small progress small reward, big progress big reward',
+  'support.rwDaily':'Daily reward (finish today\'s key tasks)','support.rwMonthly':'Monthly reward (finish monthly project)','support.rwPenalty':'Penalty (cost of failure)',
+  'settings.title':'Settings','settings.desc':'Data is 100% stored locally. No internet, no upload.','settings.backup':'Data Backup',
+  'settings.backupDesc':'Export as a JSON file anywhere; import on another computer for full migration.',
+  'btn.export':'Export','btn.import':'Import','settings.guide':'Onboarding','settings.guideDesc':'Walk through the "one-day reboot" guide again (identity → anti-vision → goal pyramid).',
+  'btn.restartGuide':'Restart Guide','settings.danger':'Danger Zone','settings.dangerDesc':'Erase all local data (export a backup first).','btn.wipe':'Wipe All Data',
+  'settings.about':'About',
+  'about':'LifeReboot V1.1<br>Built from the Action Plan product spec.<br>Identity before behavior · Less is more · Systems over willpower · Play life like a game.<br><br><i>"Life is not a race but a journey. What matters is not speed but direction; not how far you have gone, but whether you are on the right road."</i>',
+  'banner.emptyTitle':'🪪 Identity Declaration',
+  'banner.empty':'No identity declaration yet — finish it in "Vision & Mirror" or restart the guide. Behavior is just the expression of identity; without identity change, behavior snaps back.',
+  'banner.title':'🪪 This is who I am',
+  'tasks.empty':'No key tasks today.<br>What is not recorded does not happen. Write 2-3 key tasks and take the helm.',
+  'rituals':'2-min meditation,2-min stretching,Drink a glass of water',
+  'morning.done':'✓ Morning ritual completed',
+  'morning.doneSub':'Give 5 minutes to your body, then 5 minutes to write key tasks — you\'re already ahead of yesterday.',
+  'morning.prompt':'No phone right after waking up. Spend 5 minutes on one simple thing:',
+  'morning.doneBtn':'Finish Ritual',
+  'toast.morningNeed':'Check at least one: meditation / stretching / water','toast.morningDone':'🌅 A great day starts with being in control',
+  'pomo.idleWork':'Ready · Work 25 min / Break 5 min','pomo.idleBreak':'On break standby','pomo.runningWork':'Focusing · One thing at a time','pomo.runningBreak':'Take a break · Leave the screen',
+  'pomo.startWork':'Start Focus','pomo.startBreak':'Start Break','pomo.pause':'Pause',
+  'pomo.needTask':'Add today\'s key tasks first','pomo.doneOne':'🍅 Pomodoro done! Break for 5 minutes','pomo.doneFour':'⏰ 4 pomodoros done — rest 15-20 min, move around','pomo.breakOver':'Break over, back to the cockpit for the next round',
+  'pomo.select':'Add key tasks first, then start focusing','pomo.optPrefix':'🍅 ',
+  'review.done':'✓ Today\'s review completed','review.doneSub':'Tomorrow\'s 2-3 key tasks are pre-filled. See you tomorrow.',
+  'review.q1':'1. Did I finish today\'s key tasks?','review.q2':'2. Why did I fail to finish?','review.q3':'3. What pushed the core goal forward?','review.q4':'4. What are tomorrow\'s 2-3 key tasks?',
+  'review.q4Ph':'One per line; auto pre-filled tomorrow','review.doneBtn':'Finish Review',
+  'toast.reviewEmpty':'Review is about summary, not self-blame — write something',
+  'modal.prefillTitle':'Put tomorrow into today',
+  'modal.prefillBody':'You wrote {n} tasks for tomorrow in the review. Set them as tomorrow\'s key tasks? (Still capped at 3/day)',
+  'modal.no':'No thanks','modal.yesPrefill':'Yes, pre-fill','toast.prefilled':'Stashed. It will appear when you open the app tomorrow.',
+  'goal.noYear':'Not set yet — pick exactly 1 most core dimension from the five.',
+  'goal.yearTag':'Main Quest · 1-Year Core Goal','goal.editBtn0':'Set Yearly Goal','goal.editBtn1':'Edit Yearly Goal',
+  'goal.smartOk':'SMART check: ','goal.setModal':'Set 1-Year Core Goal','goal.dim':'Dimension (pick only 1)','goal.text':'Goal statement','goal.textPh':'One SMART sentence…',
+  'goal.smartCheck':'SMART self-check (all checked before saving)','modal.cancel':'Cancel',
+  'toast.smartFail':'SMART check incomplete — polish this goal first','toast.goalEmpty':'Goal statement cannot be empty',
+  'toast.goalArchived':'Old goal archived. Focus means saying no.','toast.goalSaved':'Main quest locked: ',
+  'month.curNote':'(current month · must push the yearly goal)','month.titlePh':'e.g. Finish v1 of XX','month.descLabel':'Concrete plan','month.descPh':'How to call it done? What are the actionable pieces?',
+  'month.save':'Save','month.win':'Mark Boss Victory ✓','month.unwin':'Undo Victory ✓',
+  'month.label':' Monthly Project',
+  'toast.monthSaved':' monthly project saved','toast.bossWin':'🏆 Boss defeated! Claim your monthly reward: ','toast.noReward':'(Set a monthly reward in Support System)',
+  'id.dim.Health':'Health','id.dim.Career':'Career/Learning','id.dim.Wealth':'Wealth','id.dim.Relations':'Relationships','id.dim.Mindset':'Mindset',
+  'vision.idPh':'I am a … person. I …','vision.avPhOverall':'Still the job with no results, still broke by month-end, still procrastinating life away…',
+  'mirror.idTitle':'✨ Vision · This is me','mirror.avTitle':'🪞 Mirror · What I will never become','mirror.unset':'Not filled',
+  'toast.idSaved':'Declaration saved. Read it aloud 3 times: this is me!','toast.idSavedBad':'Saved, but note: wishful wording detected in your declaration',
+  'toast.avSaved':'Mirror card saved. Every change is to avoid becoming the person in the mirror.',
+  'stat.streak':'Streak (days)','stat.doneTotal':'Key tasks done','stat.pomos':'Pomodoros total','stat.reviews':'Reviews written',
+  'archive.empty':'No review records yet. Spend 10 minutes tonight on the first one.','archive.tomorrow':'Tomorrow: ',
+  'env.empty':'No items','env.remove':'Remove',
+  'toast.partnerSaved':'Partner saved. With someone watching, persistence is no longer lonely.','toast.rewardsSaved':'Rules saved — rewards are catalysts, not stumbling blocks',
+  'settings.exported':'Backup exported. Keep it safe.','toast.importFail':'Import failed: invalid file format',
+  'modal.wipeTitle':'⚠️ Wipe all data?','modal.wipeBody':'Identity, goals, reviews and check-ins will be deleted permanently. Export a backup first.','modal.wipeOk':'Wipe Now',
+  'ob.step1':'GUIDE · 1/5 Welcome','ob.h1':'🔄 Reboot Your Life in One Day',
+  'ob.p1a':'You cannot fix your life by changing behavior — only by switching identity.<br>In the next 20 minutes we will do three things:',
+  'ob.p1b':'① <b>Identity</b> — define "the person you become" (you already are)<br>② <b>Anti-Vision</b> — let disgust drive you forward<br>③ <b>Focus</b> — lock the 1-year core goal and this month\'s project',
+  'ob.start':'Start →','ob.step2':'GUIDE · 2/5 Identity','ob.h2':'🪪 Write Your Identity Declaration',
+  'ob.p2':'Write "who I am" at the top. 1-2 sentences per dimension, <b>first-person, present tense, firm, matching your true desire</b>.<br>❌ "I hope to be a healthy person"　✅ "I am a healthy person. I work out every day."',
+  'ob.next':'Next →','ob.prev':'← Back',
+  'toast.obNeedOne':'Write a declaration for at least one dimension',
+  'ob.step3':'GUIDE · 3/5 Anti-Vision','ob.h3':'🪞 You in 5 Years If Nothing Changes',
+  'ob.p3':'Stronger than the pull of a bright future is the disgust with a bad present. If you clearly know <b>how terrible life becomes without change</b>, you instantly gain drive. Write it down — the more specific and real, the better.',
+  'ob.avLabel':'Me in 5 years, unchanged (career/finance/relationships/health/mindset)',
+  'toast.avNeed':'Write it down and face it — this is your fuel',
+  'ob.step4':'GUIDE · 4/5 Focus','ob.h4':'🎯 Lock the 1-Year Core Goal',
+  'ob.p4':'Less is more. Pick <b>1 most core dimension</b> from the five and write one SMART yearly goal. <b>Only one.</b>',
+  'ob.dimLabel':'Dimension','ob.goalLabel':'Goal (Specific · Measurable · Achievable · Relevant · Time-bound)','ob.goalPh':'By MM 2027, I will…',
+  'toast.goalNeed':'Write your core goal — only one',
+  'ob.step5':'GUIDE · 5/5 This Month\'s Boss Fight','ob.h5':'⚔️ This Month\'s Key Project',
+  'ob.p5':'Break the yearly goal into 12 monthly projects. Write <b>this month\'s</b> project — it must push the core goal and be actionable.',
+  'ob.monthLabel':' Monthly Key Project','ob.monthPh':'e.g. Finish v1 of XX','ob.finish':'🚀 Enter the Cockpit',
+  'toast.rebootDone':'🚀 Reboot complete. From today, nail 2-3 key tasks a day and beat yesterday\'s you.',
+  'toast.maxTasks':'Max 3 key tasks per day — not one more',
+  'toast.allDone':'🎉 All key tasks done today! Daily reward: ','toast.noDailyReward':'(Set a daily reward in Support System)',
+  'modal.delete':'Del',
+  'backupFile':'LifeReboot_backup_'
+}};
+
+let LANG = localStorage.getItem('lr_lang') || 'zh';
+function t(k){
+  const v = (STR[LANG] && STR[LANG][k]) !== undefined ? STR[LANG][k] : STR.zh[k];
+  return v !== undefined ? v : k;
+}
+function tf(k, rep){ return t(k).replace('{n}', rep); }
+function setLang(l){
+  LANG = l; localStorage.setItem('lr_lang', l);
+  document.getElementById('langZh').classList.toggle('active', l==='zh');
+  document.getElementById('langEn').classList.toggle('active', l==='en');
+  document.title = t('app.title');
+  applyStatic(); renderAll();
+}
+function applyStatic(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder = t(el.dataset.i18nPh); });
+  $('#aboutBox').innerHTML = t('about');
+}
+
+/* =====================================================
+   数据层：localStorage 单对象存储
+===================================================== */
+const KEY = 'lifereboot_data_v1';
+const DIMS = ['Health','Career','Wealth','Relations','Mindset'];
+const todayStr = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+
+function freshData(){
+  const months=[]; for(let i=1;i<=12;i++) months.push({month:i,title:'',desc:'',done:false});
+  return {
+    onboarded:false,
+    identity:{}, antiVision:{},
+    yearGoal:{text:'',dimension:'',smart:{},createdAt:'',archived:[]},
+    months, curMonth:(new Date().getMonth()+1),
+    today:{date:todayStr(),tasks:[],morningDone:false,review:null},
+    history:{},
+    partner:{name:'',contact:'',rules:''},
+    env:{neg:[],pos:[]},
+    rewards:{daily:'',monthly:'',penalty:''}
+  };
+}
+let D = load();
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return freshData();
+    const d = JSON.parse(raw);
+    const f = freshData();
+    const merged = Object.assign(f, d);
+    merged.today = (d.today && d.today.date===todayStr()) ? d.today : (d.today?archive(d.today,d.history||{}):f.today);
+    return merged;
+  }catch(e){ return freshData(); }
+}
+function archive(tk, hist){
+  hist[tk.date] = {tasks:tk.tasks, morningDone:tk.morningDone, review:tk.review,
+                  doneCount:tk.tasks.filter(x=>x.done).length, total:tk.tasks.length};
+  return freshData().today;
+}
+function save(){ localStorage.setItem(KEY, JSON.stringify(D)); refreshCombo(); }
+
+/* =====================================================
+   通用 UI
+===================================================== */
+const $ = s=>document.querySelector(s);
+function toast(msg){ const tt=$('#toast'); tt.textContent=msg; tt.classList.add('show'); clearTimeout(tt._h); tt._h=setTimeout(()=>tt.classList.remove('show'),2400); }
+function openModal(html){ $('#modalBody').innerHTML=html; $('#modal').classList.add('show'); }
+function closeModal(){ $('#modal').classList.remove('show'); }
+
+document.querySelectorAll('.navitem').forEach(n=>n.onclick=()=>{
+  document.querySelectorAll('.navitem').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  n.classList.add('active');
+  $('#page-'+n.dataset.page).classList.add('active');
+  renderAll();
+});
+
+/* =====================================================
+   身份宣言
+===================================================== */
+const BAD_ID = /(我希望|我想要|我想成为|我打算|我争取|我要变成|I hope to be|I want to be|I wish to become|I plan to become)/i;
+function badIdentity(tx){ return BAD_ID.test(tx); }
+function dimName(d){ return t('id.dim.'+d); }
+function renderBanner(){
+  const b=$('#idBanner');
+  const has = DIMS.some(d=>D.identity[d]);
+  if(!has){ b.innerHTML='<h3>'+t('banner.emptyTitle')+'</h3><div class="line muted">'+t('banner.empty')+'</div>'; return; }
+  b.innerHTML='<h3>'+t('banner.title')+'</h3><div class="line">'+DIMS.filter(d=>D.identity[d]).map(d=>'<div><span class="dim">['+dimName(d)+']</span>'+esc(D.identity[d])+'</div>').join('')+'</div>';
+}
+function renderIdEditor(){
+  $('#idEditor').innerHTML = DIMS.map(d=>
+    '<div><label class="f">'+dimName(d)+'</label><textarea rows="3" data-dim="'+d+'" class="idEd" placeholder="'+t('vision.idPh')+'">'+esc(D.identity[d]||'')+'</textarea></div>').join('');
+  $('#avEditor').innerHTML = DIMS.map(d=>
+    '<div><label class="f">'+dimName(d)+'</label><textarea rows="3" data-dim="'+d+'" class="avEd">'+esc(D.antiVision[d]||'')+'</textarea></div>').join('');
+}
+function saveIdentity(){
+  document.querySelectorAll('.idEd').forEach(x=>D.identity[x.dataset.dim]=x.value.trim());
+  const bad = DIMS.some(d=>badIdentity(D.identity[d]));
+  $('#idWarn').style.display = bad?'block':'none';
+  save(); renderBanner();
+  toast(bad? t('toast.idSavedBad') : t('toast.idSaved'));
+}
+function saveAntiVision(){
+  document.querySelectorAll('.avEd').forEach(x=>D.antiVision[x.dataset.dim]=x.value.trim());
+  save(); renderMirror(); toast(t('toast.avSaved'));
+}
+function renderMirror(){
+  const hasId=DIMS.some(d=>D.identity[d]), hasAv=DIMS.some(d=>D.antiVision[d]);
+  const card=$('#mirrorCard');
+  if(!(hasId||hasAv)){card.style.display='none';return;}
+  card.style.display='block';
+  const idPart = DIMS.filter(d=>D.identity[d]).map(d=>'<div><span class="dim" style="color:var(--accent);font-weight:bold;">['+dimName(d)+']</span> '+esc(D.identity[d])+'</div>').join('')||'<span class="muted">'+t('mirror.unset')+'</span>';
+  const avPart = DIMS.filter(d=>D.antiVision[d]).map(d=>'<div><span class="dim" style="color:var(--red);font-weight:bold;">['+dimName(d)+']</span> '+esc(D.antiVision[d])+'</div>').join('')||'<span class="muted">'+t('mirror.unset')+'</span>';
+  $('#mirrorBox').innerHTML =
+    '<div class="card" style="margin:0;border-color:#4a3d1e;"><h3 style="color:var(--accent2);">'+t('mirror.idTitle')+'</h3>'+idPart+'</div>'+
+    '<div class="card" style="margin:0;border-color:#58242c;"><h3 style="color:var(--red);">'+t('mirror.avTitle')+'</h3>'+avPart+'</div>';
+}
+
+/* =====================================================
+   目标金字塔
+===================================================== */
+const SMART_LABELS_ZH=['具体（我要做什么）','可衡量（怎么算完成）','可实现（跳一跳够得着）','相关性（它属于我最核心的维度）','有时间限制（截止日期）'];
+const SMART_LABELS_EN=['Specific (what exactly)','Measurable (what counts as done)','Achievable (a stretch, but reachable)','Relevant (belongs to my core dimension)','Time-bound (deadline)'];
+function SMART_LABELS(){ return LANG==='en'?SMART_LABELS_EN:SMART_LABELS_ZH; }
+function renderGoal(){
+  const y=D.yearGoal;
+  const smartOk = SMART_LABELS().filter((l,i)=>y.smart['s'+i]).join(' ｜ ');
+  $('#yearBox').innerHTML =
+    '<h3>'+t('goal.yearTag')+(y.dimension?' <span class="tag" style="color:#9d8fc9;">['+dimName(y.dimension)+']</span>':'')+'</h3>'+
+    (y.text?'<div class="gtxt">'+esc(y.text)+'</div><p class="muted" style="margin-top:8px;">'+t('goal.smartOk')+smartOk+'</p>'
+     :'<div class="gtxt muted" style="font-weight:normal;font-size:14px;">'+t('goal.noYear')+'</div>')+
+    '<div style="margin-top:12px;"><button class="sm" onclick="editYearGoal()">'+(y.text?t('goal.editBtn1'):t('goal.editBtn0'))+'</button></div>';
+  $('#monthRow').innerHTML=D.months.map(m=>'<span class="mchip '+(m.month===D.curMonth?'cur':'')+' '+(m.done?'done':'')+'" onclick="showMonth('+m.month+')">'+m.month+(LANG==='en'?' Mo':' 月')+(m.done?' ✓':'')+'</span>').join('');
+  showMonth(curMonthSel||D.curMonth);
+}
+function editYearGoal(){
+  const y=D.yearGoal;
+  openModal('<h3>'+t('goal.setModal')+'</h3>'+
+    '<label class="f">'+t('goal.dim')+'</label><select id="ygDim">'+DIMS.map(d=>'<option value="'+d+'" '+(y.dimension===d?'selected':'')+'>'+dimName(d)+'</option>').join('')+'</select>'+
+    '<label class="f">'+t('goal.text')+'</label><textarea id="ygText" rows="3" placeholder="'+t('goal.textPh')+'">'+esc(y.text)+'</textarea>'+
+    '<label class="f" style="margin-top:12px;">'+t('goal.smartCheck')+'</label>'+
+    SMART_LABELS().map((l,i)=>'<div class="chkline"><input type="checkbox" id="sm'+i+'" '+(y.smart['s'+i]?'checked':'')+'><span>'+l+'</span></div>').join('')+
+    '<div class="modal-btns"><button class="ghost" onclick="closeModal()">'+t('modal.cancel')+'</button><button onclick="saveYearGoal()">'+t('btn.save')+'</button></div>');
+}
+function saveYearGoal(){
+  const labels=SMART_LABELS();
+  const all = labels.every((l,i)=>$('#sm'+i).checked);
+  if(!all){ toast(t('toast.smartFail')); return; }
+  if(!$('#ygText').value.trim()){ toast(t('toast.goalEmpty')); return; }
+  if(D.yearGoal.text && D.yearGoal.text!==$('#ygText').value.trim()){
+    D.yearGoal.archived.push({text:D.yearGoal.text,dimension:D.yearGoal.dimension,retiredAt:todayStr()});
+    toast(t('toast.goalArchived'));
+  }
+  D.yearGoal.dimension=$('#ygDim').value; D.yearGoal.text=$('#ygText').value.trim();
+  D.yearGoal.smart={}; labels.forEach((l,i)=>D.yearGoal.smart['s'+i]=true);
+  if(!D.yearGoal.createdAt) D.yearGoal.createdAt=todayStr();
+  save(); closeModal(); renderGoal(); toast(t('toast.goalSaved')+D.yearGoal.text);
+}
+let curMonthSel=null;
+function showMonth(m){
+  curMonthSel=m; D.curMonth=D.curMonth||m;
+  const mm=D.months[m-1];
+  const isCur = m===D.curMonth;
+  $('#monthDetail').innerHTML =
+    '<label class="f">'+m+t('month.label')+(isCur?' <span class="muted">'+t('month.curNote')+'</span>':'')+'</label>'+
+    '<input type="text" id="mTitle" value="'+esc(mm.title)+'" placeholder="'+t('month.titlePh')+'">'+
+    '<label class="f">'+t('month.descLabel')+'</label><textarea id="mDesc" rows="2" placeholder="'+t('month.descPh')+'">'+esc(mm.desc)+'</textarea>'+
+    '<div style="display:flex;gap:10px;margin-top:12px;">'+
+      '<button class="sm" onclick="saveMonth('+m+')">'+t('month.save')+'</button>'+
+      (mm.title?'<button class="sm ghost" onclick="toggleMonthDone('+m+')">'+(mm.done?t('month.unwin'):t('month.win'))+'</button>':'')+
+    '</div>';
+  document.querySelectorAll('.mchip').forEach((c,i)=>c.classList.toggle('cur',i+1===curMonthSel));
+}
+function saveMonth(m){
+  D.months[m-1].title=$('#mTitle').value.trim();
+  D.months[m-1].desc=$('#mDesc').value.trim();
+  save(); renderGoal(); toast(m+t('toast.monthSaved'));
+}
+function toggleMonthDone(m){
+  D.months[m-1].done=!D.months[m-1].done;
+  save(); renderGoal();
+  if(D.months[m-1].done) toast(t('toast.bossWin')+(D.rewards.monthly||t('toast.noReward')));
+}
+
+/* =====================================================
+   今日：关键事 / 晨间 / 复盘
+===================================================== */
+function renderTasks(){
+  const list=$('#taskList');
+  if(!D.today.tasks.length){ list.innerHTML='<div class="empty">'+t('tasks.empty')+'</div>'; }
+  else{
+    list.innerHTML=D.today.tasks.map((tk,i)=>
+      '<div class="task '+(tk.done?'done':'')+'">'+
+      '<div class="chk" onclick="toggleTask('+i+')">'+(tk.done?'✓':'')+'</div>'+
+      '<div class="txt">'+esc(tk.text)+'</div>'+
+      '<div class="pomo">'+'🍅'.repeat(Math.min(tk.pomodoros||0,8))+(tk.pomodoros?' ×'+tk.pomodoros:'')+'</div>'+
+      '<button class="sm ghost" onclick="delTask('+i+')">'+t('modal.delete')+'</button></div>').join('');
+  }
+  $('#taskAddRow').style.display = D.today.tasks.length>=3?'none':'flex';
+  renderPomoTarget();
+}
+function addTask(){
+  const v=$('#taskInput').value.trim(); if(!v) return;
+  if(D.today.tasks.length>=3){ toast(t('toast.maxTasks')); return; }
+  D.today.tasks.push({text:v,done:false,pomodoros:0});
+  $('#taskInput').value='';
+  save(); renderTasks();
+}
+function toggleTask(i){
+  D.today.tasks[i].done=!D.today.tasks[i].done;
+  save(); renderTasks();
+  const all=D.today.tasks.every(tk=>tk.done);
+  if(all && D.today.tasks.length){ toast(t('toast.allDone')+(D.rewards.daily||t('toast.noDailyReward'))); }
+}
+function delTask(i){ D.today.tasks.splice(i,1); save(); renderTasks(); }
+
+function renderMorning(){
+  const box=$('#morningBox');
+  if(D.today.morningDone){ box.innerHTML='<p class="ok" style="font-size:13.5px;">'+t('morning.done')+'</p><p class="muted" style="margin-top:6px;">'+t('morning.doneSub')+'</p>'; return; }
+  const rituals=t('rituals').split(',');
+  box.innerHTML='<p class="muted" style="margin-bottom:10px;">'+t('morning.prompt')+'</p>'+
+    rituals.map(r=>'<div class="chkline"><input type="checkbox" class="rit">'+r+'</div>').join('')+
+    '<div style="margin-top:10px;"><button class="sm" onclick="doneMorning()">'+t('morning.doneBtn')+'</button></div>';
+}
+function doneMorning(){
+  const any=document.querySelectorAll('.rit:checked').length>0;
+  if(!any){ toast(t('toast.morningNeed')); return; }
+  D.today.morningDone=true; save(); renderMorning(); toast(t('toast.morningDone'));
+}
+
+function renderReview(){
+  const box=$('#reviewBox');
+  if(D.today.review){
+    box.innerHTML='<p class="ok" style="font-size:13.5px;">'+t('review.done')+'</p><p class="muted" style="margin-top:6px;">'+t('review.doneSub')+'</p>';
+  }else{
+    box.innerHTML=
+      '<label class="f">'+t('review.q1')+'</label><textarea id="rq1" rows="2"></textarea>'+
+      '<label class="f">'+t('review.q2')+'</label><textarea id="rq2" rows="2"></textarea>'+
+      '<label class="f">'+t('review.q3')+'</label><textarea id="rq3" rows="2"></textarea>'+
+      '<label class="f">'+t('review.q4')+'</label><textarea id="rq4" rows="2" placeholder="'+t('review.q4Ph')+'"></textarea>'+
+      '<div style="margin-top:12px;"><button class="sm" onclick="doneReview()">'+t('review.doneBtn')+'</button></div>';
+  }
+}
+function doneReview(){
+  const r={q1:$('#rq1').value.trim(),q2:$('#rq2').value.trim(),q3:$('#rq3').value.trim(),q4:$('#rq4').value.trim(),date:todayStr()};
+  if(!r.q1&&!r.q2&&!r.q3&&!r.q4){ toast(t('toast.reviewEmpty')); return; }
+  D.today.review=r;
+  const next=r.q4.split(/\n+/).map(s=>s.trim()).filter(Boolean).slice(0,3);
+  if(next.length){
+    openModal('<h3>'+t('modal.prefillTitle')+'</h3><p class="muted">'+tf('modal.prefillBody',next.length)+'</p>'+
+      '<div style="margin:10px 0;">'+next.map(x=>'<div class="chkline">• '+esc(x)+'</div>').join('')+'</div>'+
+      '<div class="modal-btns"><button class="ghost" onclick="closeModal()">'+t('modal.no')+'</button><button onclick="prefillTomorrow()">'+t('modal.yesPrefill')+'</button></div>');
+    window._prefill=next;
+  }
+  save(); renderReview();
+}
+function prefillTomorrow(){
+  D._tomorrowDraft = window._prefill||[];
+  save(); closeModal(); toast(t('toast.prefilled'));
+}
+
+/* =====================================================
+   番茄钟
+===================================================== */
+let pomo={running:false,phase:'work',left:25*60,ticks:0,timer:null};
+function renderPomoTarget(){
+  const sel=$('#pomoTarget');
+  const cur=sel.value;
+  sel.innerHTML=D.today.tasks.map((tk,i)=>'<option value="'+i+'" '+(String(i)===cur?'selected':'')+'>'+t('pomo.optPrefix')+esc(tk.text)+'</option>').join('')||'<option value="">'+t('pomo.select')+'</option>';
+}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function pomoRender(){
+  const tEl=$('#pomoTime'); tEl.textContent=fmt(pomo.left);
+  tEl.classList.toggle('break',pomo.phase==='break');
+  $('#pomoState').textContent = !pomo.running?(pomo.phase==='work'?t('pomo.idleWork'):t('pomo.idleBreak'))
+    :(pomo.phase==='work'?t('pomo.runningWork'):t('pomo.runningBreak'));
+  $('#pomoBtn').textContent=pomo.running?t('pomo.pause'):(pomo.phase==='work'?t('pomo.startWork'):t('pomo.startBreak'));
+  $('#pomoDots').innerHTML=[0,1,2,3].map(i=>'<span class="'+(i<pomo.ticks?'lit':'')+'">'+(i<pomo.ticks?'●':'○')+'</span>').join('');
+}
+function pomoToggle(){
+  if($('#pomoTarget').value==='' && pomo.phase==='work' && !pomo.running){ toast(t('pomo.needTask')); return; }
+  pomo.running=!pomo.running;
+  if(pomo.running){ pomo.timer=setInterval(pomoTick,1000); }else{ clearInterval(pomo.timer); }
+  pomoRender();
+}
+function pomoTick(){
+  pomo.left--;
+  if(pomo.left<=0){ pomoPhaseEnd(); }
+  pomoRender();
+}
+function beep(){
+  try{ const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    [0,0.25,0.5].forEach(tt=>{ const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);o.frequency.value=880;g.gain.value=.12;
+      o.start(ctx.currentTime+tt);o.stop(ctx.currentTime+tt+.14);});
+  }catch(e){}
+}
+function pomoPhaseEnd(){
+  clearInterval(pomo.timer); pomo.running=false; beep();
+  if(pomo.phase==='work'){
+    pomo.ticks++;
+    const i=parseInt($('#pomoTarget').value);
+    if(!isNaN(i)&&D.today.tasks[i]){ D.today.tasks[i].pomodoros=(D.today.tasks[i].pomodoros||0)+1; save(); renderTasks(); }
+    if(pomo.ticks>=4){ pomo.phase='break'; pomo.left=18*60; pomo.ticks=0; toast(t('pomo.doneFour')); }
+    else{ pomo.phase='break'; pomo.left=5*60; toast(t('pomo.doneOne')); }
+  }else{
+    pomo.phase='work'; pomo.left=25*60; toast(t('pomo.breakOver'));
+  }
+}
+function pomoReset(){ clearInterval(pomo.timer); pomo.running=false; pomo.phase='work'; pomo.left=25*60; pomo.ticks=0; pomoRender(); }
+
+/* =====================================================
+   复盘档案：统计 + 热力图 + 历史
+===================================================== */
+function allDays(){
+  const days={};
+  Object.keys(D.history).forEach(k=>{ days[k]=D.history[k]; });
+  days[D.today.date]={tasks:D.today.tasks,morningDone:D.today.morningDone,review:D.today.review,
+    doneCount:D.today.tasks.filter(x=>x.done).length,total:D.today.tasks.length};
+  return days;
+}
+function dayLevel(rec){
+  if(!rec||!rec.total) return 0;
+  const r=rec.doneCount/rec.total;
+  if(rec.total&&r===1) return 3;
+  if(r>=0.5) return 2;
+  if(rec.doneCount>0) return 1;
+  return 0;
+}
+function renderStats(){
+  const days=allDays();
+  const totalReviews=Object.values(days).filter(d=>d.review).length;
+  const totalPomos=Object.values(D.today.tasks).reduce((s,tk)=>s+(tk.pomodoros||0),0)
+    + Object.values(D.history).reduce((s,h)=>s+(h.tasks||[]).reduce((a,tk)=>a+(tk.pomodoros||0),0),0);
+  const totalDone=Object.values(days).reduce((s,d)=>s+(d.doneCount||0),0);
+  $('#statRow').innerHTML=
+    '<div class="stat"><div class="v">'+refreshCombo()+'</div><div class="k">'+t('stat.streak')+'</div></div>'+
+    '<div class="stat"><div class="v">'+totalDone+'</div><div class="k">'+t('stat.doneTotal')+'</div></div>'+
+    '<div class="stat"><div class="v">'+totalPomos+'</div><div class="k">'+t('stat.pomos')+'</div></div>'+
+    '<div class="stat"><div class="v">'+totalReviews+'</div><div class="k">'+t('stat.reviews')+'</div></div>';
+}
+function renderHeatmap(){
+  const days=allDays();
+  const end=new Date();
+  const start=new Date(end); start.setDate(end.getDate()-139);
+  start.setDate(start.getDate()-start.getDay());
+  let html='';
+  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+    const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    const lv=dayLevel(days[k]);
+    html+='<div class="hm-cell'+(lv?' l'+lv:'')+'" title="'+k+'"></div>';
+  }
+  $('#heatmap').innerHTML=html;
+}
+function renderReviewHistory(){
+  const keys=Object.keys(D.history).sort().reverse();
+  if(!keys.length){ $('#reviewHistory').innerHTML='<div class="empty">'+t('archive.empty')+'</div>'; return; }
+  $('#reviewHistory').innerHTML=keys.map(k=>{
+    const r=D.history[k].review; if(!r) return '';
+    const f=(label,v)=>v?'<div class="a"><b style="color:var(--sub);font-weight:normal;">'+label+'</b>'+esc(v)+'</div>':'';
+    return '<div class="review-item"><div class="d">📅 '+k+'</div>'+f('① ',r.q1)+f('② ',r.q2)+f('③ ',r.q3)+f(t('archive.tomorrow'),r.q4)+'</div>';
+  }).join('')||'<div class="empty">'+t('archive.empty')+'</div>';
+}
+
+/* =====================================================
+   连击
+===================================================== */
+function refreshCombo(){
+  const days=allDays();
+  let n=0; const d=new Date();
+  const lvToday=dayLevel(days[todayStr()]);
+  if(lvToday>=3) n++;
+  for(let i=1;i<400;i++){
+    const dd=new Date(d); dd.setDate(d.getDate()-i);
+    const k=dd.getFullYear()+'-'+String(dd.getMonth()+1).padStart(2,'0')+'-'+String(dd.getDate()).padStart(2,'0');
+    if(dayLevel(days[k])>=3) n++; else break;
+  }
+  const el=$('#navCombo'); if(el) el.textContent=n;
+  return n;
+}
+
+/* =====================================================
+   支撑体系
+===================================================== */
+function renderSupport(){
+  $('#ptName').value=D.partner.name; $('#ptContact').value=D.partner.contact; $('#ptRules').value=D.partner.rules;
+  $('#rwDaily').value=D.rewards.daily; $('#rwMonthly').value=D.rewards.monthly; $('#rwPenalty').value=D.rewards.penalty;
+  const mk=(arr,box,type)=>{ $(box).innerHTML=arr.length?arr.map((x,i)=>'<div class="task"><div class="txt">'+esc(x)+'</div><button class="sm ghost" onclick="delEnv(\''+type+'\','+i+')">'+t('env.remove')+'</button></div>').join(''):'<div class="empty" style="padding:10px;">'+t('env.empty')+'</div>'; };
+  mk(D.env.neg,'#envNeg','neg'); mk(D.env.pos,'#envPos','pos');
+}
+function savePartner(){ D.partner={name:$('#ptName').value.trim(),contact:$('#ptContact').value.trim(),rules:$('#ptRules').value.trim()}; save(); toast(t('toast.partnerSaved')); }
+function saveRewards(){ D.rewards={daily:$('#rwDaily').value.trim(),monthly:$('#rwMonthly').value.trim(),penalty:$('#rwPenalty').value.trim()}; save(); toast(t('toast.rewardsSaved')); }
+function addEnv(type){
+  const inp=$(type==='neg'?'#envNegInput':'#envPosInput');
+  const v=inp.value.trim(); if(!v) return;
+  D.env[type].push(v); inp.value=''; save(); renderSupport();
+}
+function delEnv(type,i){ D.env[type].splice(i,1); save(); renderSupport(); }
+
+/* =====================================================
+   设置：导入导出 / 清空
+===================================================== */
+function exportData(){
+  const blob=new Blob([JSON.stringify(D,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=t('backupFile')+todayStr()+'.json';
+  a.click(); toast(t('settings.exported'));
+}
+function importData(ev){
+  const f=ev.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{
+      const d=JSON.parse(r.result);
+      if(!d.today||!d.months) throw 0;
+      D=Object.assign(freshData(),d);
+      save(); location.reload();
+    }catch(e){ toast(t('toast.importFail')); } };
+  r.readAsText(f); ev.target.value='';
+}
+function wipeAll(){
+  openModal('<h3>'+t('modal.wipeTitle')+'</h3><p class="muted">'+t('modal.wipeBody')+'</p>'+
+    '<div class="modal-btns"><button class="ghost" onclick="closeModal()">'+t('modal.cancel')+'</button><button class="danger" style="background:#3a151b;color:#f0a5a5;" onclick="doWipe()">'+t('modal.wipeOk')+'</button></div>');
+}
+function doWipe(){ localStorage.removeItem(KEY); location.reload(); }
+
+/* =====================================================
+   引导流程
+===================================================== */
+let obStep=0;
+function restartOnboard(){ obStep=0; $('#onboard').classList.add('show'); renderOb(); }
+function renderOb(){
+  const b=$('#obBody');
+  if(obStep===0){
+    b.innerHTML='<div class="ob-step">'+t('ob.step1')+'</div><h2>'+t('ob.h1')+'</h2>'+
+    '<p>'+t('ob.p1a')+'</p><p>'+t('ob.p1b')+'</p>'+
+    '<div class="ob-nav"><span></span><button onclick="obStep=1;renderOb()">'+t('ob.start')+'</button></div>';
+  }else if(obStep===1){
+    b.innerHTML='<div class="ob-step">'+t('ob.step2')+'</div><h2>'+t('ob.h2')+'</h2>'+
+    '<p>'+t('ob.p2')+'</p>'+
+    DIMS.map(d=>'<label class="f">'+dimName(d)+'</label><textarea rows="2" class="ob-id" data-dim="'+d+'" placeholder="'+t('vision.idPh')+'"></textarea>').join('')+
+    '<div class="warnbox" id="obWarn">'+t('vision.warn')+'</div>'+
+    '<div class="ob-nav"><button class="ghost" onclick="obStep=0;renderOb()">'+t('ob.prev')+'</button><button onclick="obNext1()">'+t('ob.next')+'</button></div>';
+  }else if(obStep===2){
+    b.innerHTML='<div class="ob-step">'+t('ob.step3')+'</div><h2>'+t('ob.h3')+'</h2>'+
+    '<p>'+t('ob.p3')+'</p>'+
+    '<label class="f">'+t('ob.avLabel')+'</label><textarea rows="5" id="obAv" placeholder="'+t('vision.avPhOverall')+'"></textarea>'+
+    '<div class="ob-nav"><button class="ghost" onclick="obStep=1;renderOb()">'+t('ob.prev')+'</button><button onclick="obNext2()">'+t('ob.next')+'</button></div>';
+  }else if(obStep===3){
+    b.innerHTML='<div class="ob-step">'+t('ob.step4')+'</div><h2>'+t('ob.h4')+'</h2>'+
+    '<p>'+t('ob.p4')+'</p>'+
+    '<label class="f">'+t('ob.dimLabel')+'</label><select id="obDim">'+DIMS.map(d=>'<option value="'+d+'">'+dimName(d)+'</option>').join('')+'</select>'+
+    '<label class="f">'+t('ob.goalLabel')+'</label><textarea rows="2" id="obGoal" placeholder="'+t('ob.goalPh')+'"></textarea>'+
+    '<div class="ob-nav"><button class="ghost" onclick="obStep=2;renderOb()">'+t('ob.prev')+'</button><button onclick="obNext3()">'+t('ob.next')+'</button></div>';
+  }else if(obStep===4){
+    b.innerHTML='<div class="ob-step">'+t('ob.step5')+'</div><h2>'+t('ob.h5')+'</h2>'+
+    '<p>'+t('ob.p5')+'</p>'+
+    '<label class="f">'+D.curMonth+t('ob.monthLabel')+'</label><input type="text" id="obMonth" placeholder="'+t('ob.monthPh')+'">'+
+    '<div class="ob-nav"><button class="ghost" onclick="obStep=3;renderOb()">'+t('ob.prev')+'</button><button onclick="obDone()">'+t('ob.finish')+'</button></div>';
+  }
+}
+function obNext1(){
+  const vals={}; document.querySelectorAll('.ob-id').forEach(x=>vals[x.dataset.dim]=x.value.trim());
+  const any=DIMS.some(d=>vals[d]);
+  if(!any){ toast(t('toast.obNeedOne')); return; }
+  if(DIMS.some(d=>badIdentity(vals[d]))){ $('#obWarn').style.display='block'; return; }
+  D.identity=Object.assign(D.identity,vals); save(); obStep=2; renderOb();
+}
+function obNext2(){
+  const v=$('#obAv').value.trim();
+  if(!v){ toast(t('toast.avNeed')); return; }
+  D.antiVision['_overall']=v; save(); obStep=3; renderOb();
+}
+function obNext3(){
+  const v=$('#obGoal').value.trim();
+  if(!v){ toast(t('toast.goalNeed')); return; }
+  D.yearGoal={text:v,dimension:$('#obDim').value,smart:{s0:1,s1:1,s2:1,s3:1,s4:1},createdAt:todayStr(),archived:[]};
+  save(); obStep=4; renderOb();
+}
+function obDone(){
+  const v=$('#obMonth').value.trim();
+  if(v){ D.months[D.curMonth-1].title=v; }
+  D.onboarded=true; save();
+  $('#onboard').classList.remove('show');
+  renderAll(); toast(t('toast.rebootDone'));
+}
+
+/* =====================================================
+   工具 & 总渲染
+===================================================== */
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function renderAll(){
+  renderBanner(); renderTasks(); renderMorning(); renderReview(); renderPomoTarget(); pomoRender();
+  renderGoal(); renderIdEditor(); renderMirror(); renderStats(); renderHeatmap(); renderReviewHistory(); renderSupport(); refreshCombo();
+}
+
+/* 启动 */
+if(D._tomorrowDraft && D._tomorrowDraft.length && !D.today.tasks.length){
+  D.today.tasks=D._tomorrowDraft.slice(0,3).map(x=>({text:x,done:false,pomodoros:0}));
+  D._tomorrowDraft=[]; save();
+}
+document.getElementById('langZh').classList.toggle('active', LANG==='zh');
+document.getElementById('langEn').classList.toggle('active', LANG==='en');
+document.title = t('app.title');
+applyStatic();
+renderAll();
+if(!D.onboarded) restartOnboard();
+</script>
+</body>
+</html>

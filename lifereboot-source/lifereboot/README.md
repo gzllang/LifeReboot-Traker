@@ -1,0 +1,59 @@
+# 🔄 LifeReboot · 人生重启
+
+**Bilingual (English / 中文) goal tracker for Windows.** LifeReboot turns the "Reboot Your Life in One Day" methodology into a daily-executable desktop system: define who you are, lock one yearly goal, and beat yesterday's you with 2-3 key tasks a day.
+
+**中英文双语 Windows 桌面目标管理软件。** LifeReboot 把「一天重启人生」方法论固化为每日可执行的系统：定义你是谁，锁定一条年度核心目标，每天用 2-3 件关键事赢过昨天的自己。
+
+---
+
+## ✨ Features / 功能
+
+| | |
+|---|---|
+| 🪪 **Identity Declaration / 身份宣言** | Five dimensions (Health · Career · Wealth · Relationships · Mindset), present-tense validation / 五维度身份宣言，愿望式措辞自动警示 |
+| 🪞 **Anti-Vision / 反向愿景** | A "dark mirror": who you'll be in 5 years if nothing changes / 魔镜卡：愿景与反愿景对照，双驱动 |
+| 🎯 **Goal Pyramid / 目标金字塔** | 1 yearly goal (SMART check) → 12 monthly boss fights → 2-3 daily key tasks / 年目标→月项目→每日关键事，强制聚焦 |
+| 🍅 **Pomodoro / 番茄钟** | 25/5 timer bound to tasks; long break after 4 rounds / 绑定关键事的番茄钟 |
+| 🌙 **Evening Review / 晚间复盘** | Four fixed questions; tomorrow's tasks auto pre-filled / 固定四问，明日预填 |
+| 🔥 **Heatmap & Streak / 热力图与连击** | GitHub-style heatmap, streak counter / 年度打卡热力图 + 连击 |
+| 🤝 **Support System / 支撑体系** | Accountability partner, environment lists, reward rules / 问责伙伴·环境清单·奖惩机制 |
+| 🌐 **CN / EN Switch / 中英切换** | One click, instant, persisted / 一键切换即时生效 |
+
+## 🔒 Privacy / 隐私
+
+**100% offline & local.** No network, no upload, no telemetry. All data stays in your machine's localStorage; export/import JSON backups anytime.
+
+**纯本地离线运行**，不联网、不上传、无遥测。数据全部存本机，随时导出/导入 JSON 备份。
+
+## 📦 Install / 安装
+
+### Option A: Installer / 安装包（推荐）
+Download `LifeReboot Setup x.y.z.exe` from [Releases](../../releases) and run it. A desktop shortcut is created automatically.
+从 Releases 页下载安装包双击运行，自动创建桌面快捷方式。
+
+### Option B: Build from source / 源码构建
+```bash
+npm install --registry=https://registry.npmmirror.com   # or the default registry
+npm start                                               # dev run / 开发运行
+npm run dist                                            # build NSIS installer / 打包安装包
+```
+
+> Windows users in mainland China: set `ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/` and `ELECTRON_BUILDER_BINARIES_MIRROR=https://npmmirror.com/mirrors/electron-builder-binaries/` before installing/building.
+> 中国大陆用户建议先设置上述两个镜像环境变量再安装/打包。
+
+## 🗺️ Roadmap / 路线图
+
+- [x] V1.0 — Core loop: identity, anti-vision, pyramid, tasks, pomodoro, review, heatmap
+- [x] V1.1 — Bilingual CN/EN UI, renamed LifeReboot
+- [ ] V1.2 — Dashboard enhancements, weekly report export / 数据看板增强
+- [ ] V2.0 — Auto-start, tray reminders, multi-device backup / 开机自启、托盘提醒、多设备备份
+
+## 📖 Documentation / 文档
+
+- [Product Specification V1.1 (bilingual) / 产品说明书 V1.1（双语）](docs/PRODUCT_SPEC.html)
+- The methodology comes from an "Action Plan" document: identity precedes behavior; less is more; systems over willpower; play life like a game.
+- 方法论来自一份《行动方案》：身份先于行为 · 少而精 · 靠系统不靠意志力 · 把人生玩成游戏。
+
+## 📄 License / 许可证
+
+[MIT](LICENSE)
