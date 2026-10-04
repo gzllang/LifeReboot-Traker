@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="SIvlC5Rxdb1HtIwIfp78V2">
+<head data-page-node-id="qcSyyULI3uV4EkYr0v4bqG">
+<meta charset="UTF-8" data-page-node-id="C8nMEmphRLaFBlvstozXRr">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="H93Hr7iFJZ1hH7BmQ0lqDX">
+<title>LifeReboot · Product Spec V1.1 / 产品说明书</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --ink:#1f2933; --sub:#5b6b7b;
+    --accent:#c9a24b; --accent-dark:#0f1e33; --line:#e5e9ef;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:"Microsoft YaHei","PingFang SC","Segoe UI",sans-serif; background:var(--bg); color:var(--ink); line-height:1.75; padding:32px 16px;}
+  .page{max-width:960px; margin:0 auto;}
+  header{background:var(--accent-dark); color:#fff; border-radius:14px; padding:32px 40px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:flex-start; gap:20px;}
+  header h1{font-size:26px; letter-spacing:1px;}
+  header .meta{margin-top:10px; font-size:13px; color:#c8d2de;}
+  header .tag{display:inline-block; background:var(--accent); color:#1a1405; font-size:12px; padding:2px 10px; border-radius:20px; margin-right:8px;}
+  .langbar{display:flex; gap:6px; flex-shrink:0;}
+  .langbtn{background:#1d3250;border:1px solid #3a5a7a;color:#c8d2de;border-radius:8px;padding:7px 16px;font-size:13px;cursor:pointer;font-weight:bold;}
+  .langbtn.active{background:var(--accent);border-color:var(--accent);color:#1a1405;}
+  section{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:28px 32px; margin-bottom:20px;}
+  h2{font-size:19px; border-left:4px solid var(--accent); padding-left:12px; margin-bottom:16px;}
+  h3{font-size:15.5px; margin:18px 0 8px; color:var(--accent-dark);}
+  p{margin-bottom:10px; color:#33414f;}
+  ul,ol{padding-left:22px; margin-bottom:10px;}
+  li{margin-bottom:6px; color:#33414f;}
+  table{width:100%; border-collapse:collapse; margin:12px 0; font-size:13.5px;}
+  th{background:#f0ece1; text-align:left; padding:9px 12px; border:1px solid var(--line); white-space:nowrap;}
+  td{padding:9px 12px; border:1px solid var(--line); vertical-align:top;}
+  .quote{background:#fdf9ef; border:1px solid #ecdfc0; border-radius:10px; padding:14px 18px; font-size:14px; color:#6b5a2c; margin:12px 0;}
+  .hl{color:var(--accent-dark); font-weight:bold;}
+  .pill{display:inline-block; background:#eef3f8; color:#3a5a7a; border-radius:6px; padding:1px 8px; font-size:12px; margin-right:6px;}
+  .map{font-size:12.5px; color:#8a6d1f; background:#fdf9ef; border-radius:6px; padding:2px 8px; display:inline-block; margin-bottom:6px;}
+  footer{text-align:center; color:#9aa7b3; font-size:12px; padding:10px 0 30px;}
+  [hidden]{display:none!important;}
+</style>
+</head>
+<body data-page-node-id="OqRi7aGWIS8VW4Zq7SvsJf">
+<div class="page" data-page-node-id="DWz7DWschLnymayuilPhRQ">
+
+<header data-page-node-id="3976eUGwToULM2vCvE0pGZ">
+  <div data-page-node-id="6bWwPdhXMIRq8Aoj9H0sHg">
+    <div data-page-node-id="u4ET9DkhFKubCAlQuYRSnp"><span class="tag" data-zh="软件产品说明书" data-en="Product Specification" data-page-node-id="KeppZz0cVFAZM0Blmj3zCq">软件产品说明书</span><span class="tag" data-page-node-id="qhxDGMDFHWV2WEpSlhTmJz">V1.1</span><span class="tag" data-zh="Windows 桌面客户端" data-en="Windows Desktop App" data-page-node-id="bfsfQSVJXBUwEha3b1Kz90">Windows 桌面客户端</span></div>
+    <h1 data-page-node-id="MnIjrNkZzBHHNunbanqSP4">LifeReboot <span data-zh="人生重启 · 目标追踪系统" data-en="Goal Tracker" data-page-node-id="HSmEmfWTDxCvsPPLU2uZ0d">人生重启 · 目标追踪系统</span></h1>
+    <div class="meta" data-zh="文档依据：《李一舟 OPC 培训 · 行动方案》PDF ｜ 版本历史：V1.0 初版 / V1.1 中英双语 + 更名 LifeReboot ｜ 状态：已实现"
+         data-en="Basis: “Action Plan” PDF (Li Yizhou OPC Training) ｜ History: V1.0 initial / V1.1 bilingual CN-EN + renamed LifeReboot ｜ Status: implemented" data-page-node-id="weVoXrSNQRRekB7lC77j0v">文档依据</div>
+  </div>
+  <div class="langbar" data-page-node-id="rmC1us8aGCBdGlEyHkr82r">
+    <button class="langbtn active" id="btnZh" onclick="setLang('zh')" data-page-node-id="x5GrQUCD7VBRmqpgXGMGke">中文</button>
+    <button class="langbtn" id="btnEn" onclick="setLang('en')" data-page-node-id="WyKa1eNDVPIY70n7NB8od1">English</button>
+  </div>
+</header>
+
+<section data-page-node-id="DrZguOmAEaqnZzUgAV3NDA">
+  <h2 data-zh="一、产品概述" data-en="1. Overview" data-page-node-id="oEB41ahH3FeZDTm41eVObd">一、产品概述</h2>
+  <div data-zh="<p data-page-node-id="gOW663qs6jGq20oPaWiSD5"><span class='hl' data-page-node-id="MzARZXaCQfoRmQrrvrfi1M">产品定位：</span>一款运行在 Windows 上的单机目标管理客户端，把《行动方案》中「一天重启人生」的方法论固化为可每日执行的软件系统，帮助用户完成 <span class='hl' data-page-node-id="pl1Oilzug3aeF7vOXK8EBS">身份重塑 → 反向愿景 → 目标聚焦 → 行动落地 → 持续复盘</span> 的完整闭环，并对年度核心目标进行长期跟进。</p><p data-page-node-id="DVT890OVFhibyfK7uz8ANg"><span class='hl' data-page-node-id="HSUxkklyYTScFEhVLkS1Rf">核心理念（来自原方案）：</span></p><ul data-page-node-id="G18pVk4aGMLF2qj9k7ZhAI"><li data-page-node-id="7VcqhrCqcvJmvMSdHABapj"><b data-page-node-id="DYafXPQuPYe5yF18tkB40p">身份先于行为</b>——只改行为不改身份，失败率 80-90%；软件首页常驻「身份宣言」。</li><li data-page-node-id="RkvQ6INei3wPt2iKrNrUqj"><b data-page-node-id="1BggVkGxp8wlw6fx4bJn8n">少而精</b>——1 个年度核心目标、1 个月度重点项目、每日 2-3 件关键事，软件强制聚焦。</li><li data-page-node-id="TVVSr4SAIceNH7ZtXk3h9Y"><b data-page-node-id="IGR0FeDWNFVzt9CDgH9OTx">靠系统，不靠意志力</b>——晨间仪式、番茄钟、每晚复盘三大机制内置为日常流程。</li><li data-page-node-id="ju45XqZaSQ39io1ldPJWcb"><b data-page-node-id="yJm1ZlyslH5dXljcbxJItQ">把人生玩成游戏</b>——愿景=画面、反愿景=魔珠、年目标=主线、月项目=Boss 战、每日关键事=任务。</li></ul><div class='quote' data-page-node-id="DlKKbKKxMoqyS3GYfE2Cad">一句话总结：你无法靠「改变行为」修好人生，只能靠「换身份」重启人生。软件要做的，就是让用户每天打开电脑就被拉回「主动掌舵」状态。</div>"
+       data-en="<p data-page-node-id="WTOe3hTFpOTHDk6XVtyFrR"><span class='hl' data-page-node-id="wnXLxGPGLv6eCumeXzf7BG">Positioning:</span> A standalone goal-management desktop app for Windows that turns the 'Reboot Your Life in One Day' methodology into a daily-executable system, closing the loop of <span class='hl' data-page-node-id="VwYN3BV6FKddXwHlxYwUn2">Identity → Anti-Vision → Goal Focus → Action → Review</span> with long-term tracking of the yearly core goal.</p><p data-page-node-id="qAZxv2h7aQrG4qBCapoldH"><span class='hl' data-page-node-id="v2MEV1WbYBhmPRSTGJdAGY">Core principles (from the source document):</span></p><ul data-page-node-id="uBc3VtUWk0oXEdFaykX1bp"><li data-page-node-id="xFrkpibZYpzuYFPXpxspYG"><b data-page-node-id="5HHcEX7bBUn9cgR1uUR6wA">Identity precedes behavior</b> — changing behavior without identity fails 80-90% of the time; the Identity Declaration stays on the home screen.</li><li data-page-node-id="NlF6itgHrbvPBTE4RJ20BI"><b data-page-node-id="PHdB7CoAiBx7FESQ9fGGwV">Less is more</b> — 1 yearly goal, 1 monthly project, 2-3 key tasks per day; the app enforces focus.</li><li data-page-node-id="aOs1FaGYXrRfEDXQDtI9yw"><b data-page-node-id="BO8D6qMj9a92R6G5NCHhkH">Systems over willpower</b> — morning ritual, pomodoro and evening review are built-in routines.</li><li data-page-node-id="bLB2kB6FPylk9lMyBcijP5"><b data-page-node-id="6kYVgcLBwoWqRDogjB6PaW">Play life like a game</b> — vision = cover art, anti-vision = dark mirror, yearly goal = main quest, monthly project = boss fight, daily tasks = quests.</li></ul><div class='quote' data-page-node-id="nOsuRBdp92trkYZrtpIdQ9">In one sentence: you cannot fix your life by changing behavior — only by switching identity. This app pulls the user back into the driver's seat every time the computer starts.</div>"></div>
+</section>
+
+<section data-page-node-id="tCC2qeqkv5ES1fIIrY2Tv1">
+  <h2 data-zh="二、目标用户与使用场景" data-en="2. Users & Scenarios" data-page-node-id="nvRdOKWHN19w0qJnHqI5d4">二、目标用户与使用场景</h2>
+  <table data-page-node-id="O5FATL6BC0KGpojGtmuHfO">
+    <tr data-page-node-id="K68EhSAUb5oC4uWqdBDvmY">
+      <th data-zh="用户" data-en="User" data-page-node-id="4Xk6TaBJC0nvfSUUJOGJ6V">用户</th><th data-zh="场景" data-en="Scenario" data-page-node-id="oh00BPekdkFSOIe12GqAcE">场景</th>
+    </tr>
+    <tr data-page-node-id="mpVH3tOVfBuhZ7KTH2YpOa">
+      <td data-zh="完成过「一天重启」梳理的个人用户" data-en="Users who finished the one-day reboot exercise" data-page-node-id="ZXvnVUQ2xs26YS0eqQ6FG6">完成过「一天重启」梳理的个人用户</td>
+      <td data-zh="每天开机后打开客户端：早晨看身份宣言写计划 → 白天番茄钟推进关键事 → 晚间 10 分钟复盘打卡" data-en="Open the app daily: morning declaration & planning → pomodoro focus by day → 10-min review at night" data-page-node-id="E1S7OQaTj8rvpUW8R6bsAK">每天开机后打开客户端</td>
+    </tr>
+    <tr data-page-node-id="Yo0bUNXTGu2OkRcfrAxAVz">
+      <td data-zh="尚未梳理的新用户" data-en="New users" data-page-node-id="LmmgTx730UmqFxvx1Q8hha">尚未梳理的新用户</td>
+      <td data-zh="首次启动由软件引导，按「一日三段式」逐步完成身份宣言、反向愿景、目标金字塔的建立" data-en="A 5-step onboarding guide builds the identity declaration, anti-vision and goal pyramid" data-page-node-id="M8H6B9geb0G45uImWqsUpA">首次启动由软件引导</td>
+    </tr>
+  </table>
+</section>
+
+<section data-page-node-id="BF1OYdHieY47CCXBdbDnvY">
+  <h2 data-zh="三、功能模块（与原方案逐条对应）" data-en="3. Feature Modules (mapped to the source document)" data-page-node-id="9AkqipbSnj8TpSJOZiL6wm">三、功能模块</h2>
+
+  <h3 data-page-node-id="oXMoXbRm7uYrb3q8kr9dZa"><span data-zh="3.1 身份宣言模块" data-en="3.1 Identity Declaration" data-page-node-id="Ttg6MbtLJ3YhomO4ShZYoE">3.1 身份宣言模块</span> <span class="map" data-zh="对应：原方案·身份重塑" data-en="Maps to: Identity" data-page-node-id="UJroMPnuBwvFFEdAN3QRTG">对应：原方案·身份重塑</span></h3>
+  <div data-zh="<ul data-page-node-id="GDKdOr5dlwQs6oAu4rbqDV"><li data-page-node-id="riI1plnZm1uBrtXFN7Qxyb">五个维度录入：<span class='pill' data-page-node-id="M7Rbn39pJfpfZLgvuePhLX">健康</span><span class='pill' data-page-node-id="XEmhno9jrKFHhNfru9n8Jd">事业/学习</span><span class='pill' data-page-node-id="eNUx02gJlUL5CvZkB4x5xs">财富</span><span class='pill' data-page-node-id="vTCKdbYqbFvFb21UK6BjUC">人际关系</span><span class='pill' data-page-node-id="63PvPO3vjSbOd3TPKLCDbP">心态</span>，每维度 1-2 句。</li><li data-page-node-id="YWIa2eiQfhpyldEazKAKq0">输入校验：必须第一人称 + 现在时态，对「我希望/我想要/我想成为」等措辞给出红字警示。</li><li data-page-node-id="cx3bA5cMNq4eGZDlcouUDa">首页顶部常驻展示身份宣言，切换语言后维度名同步翻译。</li></ul>"
+       data-en="<ul data-page-node-id="ekT0uhs7olOuYw2ArHZguM"><li data-page-node-id="S5fB14spalTInwoeYgQzn9">Five dimensions: <span class='pill' data-page-node-id="V16r28ioz7dJMnC8gDv2hr">Health</span><span class='pill' data-page-node-id="otZeHk63CtyhDAmp0Mn60S">Career/Learning</span><span class='pill' data-page-node-id="BARfYI0aOK2XTMwSxDLmm3">Wealth</span><span class='pill' data-page-node-id="QBcC1jrownLCJAZqVE777X">Relationships</span><span class='pill' data-page-node-id="wvuHxmadAfnAc0CHdeDTlq">Mindset</span>, 1-2 sentences each.</li><li data-page-node-id="yPxPkvD20TRRDovl5muezM">Validation: first-person + present tense required; wishful wording triggers a red warning.</li><li data-page-node-id="vVmJXSHwmkfQ0n5iFRe77d">Displayed permanently on the home screen; dimension names translate with the UI language.</li></ul>"></div>
+
+  <h3 data-page-node-id="6Tavmyj5FGVfuCB3TvnQqJ"><span data-zh="3.2 反向愿景模块（魔镜）" data-en="3.2 Anti-Vision (Dark Mirror)" data-page-node-id="pVTTY9narTAUha19aNhkuv">3.2 反向愿景模块（魔镜）</span> <span class="map" data-zh="对应：原方案·反向愿景" data-en="Maps to: Anti-Vision" data-page-node-id="v8qOYCn6ST9le230nRIYjs">对应</span></h3>
+  <div data-zh="<ul data-page-node-id="B0xU2kwthV6gH89Ye2vPO6"><li data-page-node-id="GG8fNBEXkS4DuSGA2VqoZt">引导用户写下「如果我不变，5 年后的我会是什么样」，五维度分别描述。</li><li data-page-node-id="QzHmfTodWNND2cy3AH4y7I">保存后生成「魔镜卡」：愿景与反愿景左右对照展示。</li><li data-page-node-id="JXCFd8AEJ5trAEaIsoj4U3">渴望感与厌恶感双驱动（原文核心逻辑）。</li></ul>"
+       data-en="<ul data-page-node-id="7GNo3UWCAD89Vn4ypPyf2T"><li data-page-node-id="w48ZNJAjIauKFj16fkhpVc">Guides the user to describe who they will be in 5 years if nothing changes, per dimension.</li><li data-page-node-id="eaDqQsbMoQ67Ubn58CafYH">Saves a 'Mirror Card' showing vision vs anti-vision side by side.</li><li data-page-node-id="nampbLq5GylUf6wt7bse3j">Dual drive: desire pulls, disgust pushes (core logic of the source).</li></ul>"></div>
+
+  <h3 data-page-node-id="DCGQ2FojkqtjWUzJEOo6DV"><span data-zh="3.3 目标金字塔" data-en="3.3 Goal Pyramid" data-page-node-id="9NF992EUSL57627HcpakEY">3.3 目标金字塔</span> <span class="map" data-zh="对应：原方案·目标聚焦（三层级）" data-en="Maps to: Goal Focus (3 levels)" data-page-node-id="8XdYgMZTsgmFhHDjFzmqub">对应</span></h3>
+  <table data-page-node-id="Yoz1qy4446EVmssJKFpKTG">
+    <tr data-page-node-id="070VRsOd9yYsi4pPM7Mmh5">
+      <th data-zh="层级" data-en="Level" data-page-node-id="bJYWWDOGcmU8DqYhVOrRQm">层级</th><th data-zh="软件功能" data-en="Feature" data-page-node-id="VNwkcCsUaNOFW8s8765Ak6">软件功能</th><th data-zh="规则约束" data-en="Constraint" data-page-node-id="XaOGKxVUGEPb6BQ12eLEjz">规则约束</th>
+    </tr>
+    <tr data-page-node-id="msgUyX4lXAbRFFRIZ251yK">
+      <td data-zh="层级 1：1 年核心目标" data-en="L1: 1-year core goal" data-page-node-id="Dpkl2SJD0LR8Xqr054kEk7">层级 1：1 年核心目标</td>
+      <td data-zh="五维度中选 1 个维度写入 1 条核心目标；内置 SMART 自检清单" data-en="Pick 1 dimension, write 1 goal; built-in SMART checklist" data-page-node-id="IHwv5ea8yAiBVUnqB09ONk">五维度中选 1 个维度写入 1 条核心目标</td>
+      <td data-zh="只能存在 1 条，更换需确认并归档旧目标" data-en="Only 1 allowed; replacing archives the old goal" data-page-node-id="RS7M03QKB0jyjXpdGPhhu1">只能存在 1 条</td>
+    </tr>
+    <tr data-page-node-id="WL836D1W7SXKS4ur7TRhHw">
+      <td data-zh="层级 2：月度项目（Boss 战）" data-en="L2: Monthly project (Boss fight)" data-page-node-id="PaBxvn3kBTWbgXlCfvrJkJ">层级 2：月度项目（Boss 战）</td>
+      <td data-zh="年目标拆解为 12 个月度项目，标记当前月，可标记 Boss 战胜利" data-en="12 monthly projects derived from the yearly goal; current month highlighted; boss victory flag" data-page-node-id="FlDCaFsJELb8DoAbqUseKY">年目标拆解为 12 个月度项目</td>
+      <td data-zh="当月只能激活 1 个重点项目" data-en="1 active key project per month" data-page-node-id="vBj6J3UgXECez5GtUQxnDR">当月只能激活 1 个重点项目</td>
+    </tr>
+    <tr data-page-node-id="lQ1VZPGlG4JdbPSztgGYso">
+      <td data-zh="层级 3：每日 2-3 件关键事" data-en="L3: 2-3 daily key tasks" data-page-node-id="I7cLMjWBba633wKtH0PNew">层级 3：每日 2-3 件关键事</td>
+      <td data-zh="每天围绕当月重点项目锁定关键事，支持勾选与番茄钟计数" data-en="Daily key tasks tied to the monthly project, with pomodoro counters" data-page-node-id="yYyafuoaBTDj5ZrkUFXulM">每天围绕当月重点项目锁定关键事</td>
+      <td data-zh="每日最多 3 条，拒绝低价值事项" data-en="Max 3 per day; low-value items rejected" data-page-node-id="a5ROgJtppjUMmTQMbsFuYp">每日最多 3 条</td>
+    </tr>
+  </table>
+
+  <h3 data-page-node-id="MroA8S8VWbZojq1DARdbmT"><span data-zh="3.4 行动系统（一日三段式驾驶舱）" data-en="3.4 Action System (Three-Phase Daily Cockpit)" data-page-node-id="mxHW6KZZr7soaSaeUPh0ke">3.4 行动系统（一日三段式驾驶舱）</span> <span class="map" data-zh="对应：原方案·行动落地 + 一日三段式" data-en="Maps to: Action + Daily three phases" data-page-node-id="1C6nY2DYnxOJ2tdb0OHNG5">对应</span></h3>
+  <div data-zh="<ul data-page-node-id="VZP5KElyuVWe7Sd5xGQDE5"><li data-page-node-id="olTATrFWNpceof70ZM2MDt"><b data-page-node-id="9ZGHpoVK155rs8sVAmfNLQ">早晨 · 晨间仪式（5 分钟 + 每日计划）</b>：起床清单打卡（冥想/拉伸/喝温水任选），再写下当天关键事。</li><li data-page-node-id="QrpgR6tErtRbBNIO6y8z1n"><b data-page-node-id="XFbQH8edyR9SFA6ama3L1q">白天 · 行动驾驶舱（番茄钟）</b>：25 分钟工作 + 5 分钟休息，4 个番茄钟后提醒休息 15-20 分钟；每个番茄钟绑定某件关键事；单任务专注。</li><li data-page-node-id="A0GBsdqXpRQzgHFkuNOcHF"><b data-page-node-id="BGSvlfCApg0ugQxFF1XUP4">晚间 · 整合洞察（10 分钟复盘）</b>：固定四问，复盘记录存档并生成「明日预填」。</li></ul>"
+       data-en="<ul data-page-node-id="u4MkQrwdLUG75KCI1M9jEC"><li data-page-node-id="Zdr2J2wsqMFP4jBUbq4XQT"><b data-page-node-id="HW7mAoqYbViEYggA7h7NTE">Morning · Ritual (5 min + daily plan)</b>: wake-up checklist (meditation/stretching/water), then write key tasks.</li><li data-page-node-id="z5RbDBUqag0FnkEoIdVsih"><b data-page-node-id="Pe8WSRPtqKrEQWjTZsWk9B">Day · Cockpit (Pomodoro)</b>: 25 min work + 5 min break; after 4 pomodoros remind a 15-20 min rest; each pomodoro is bound to a task; single-task focus.</li><li data-page-node-id="sRmYFkpiD6DNtQmnsqj1KJ"><b data-page-node-id="MXMBwdlsaHKblycAa057iS">Night · Integration (10 min review)</b>: four fixed questions; records archived with 'tomorrow pre-fill'.</li></ul>"></div>
+
+  <h3 data-page-node-id="UZV4K64qQXtFtLohl0CZYG"><span data-zh="3.5 支撑体系" data-en="3.5 Support System" data-page-node-id="uYtDsaZ3CAsevXbN0RkQcX">3.5 支撑体系</span> <span class="map" data-zh="对应：原方案·强化" data-en="Maps to: Reinforcement" data-page-node-id="RqYHZaOLEym4H02B9NnuXv">对应</span></h3>
+  <div data-zh="<ul data-page-node-id="MbFmlaoXh2YSH6kXr9c0CF"><li data-page-node-id="uw17qczWNdD6ZKhWMVEO0p"><b data-page-node-id="lJX6O0sc3E07Q93i1NYCzh">问责伙伴</b>：伙伴信息、监督规则、打卡群备注。</li><li data-page-node-id="WNcVH5aqBxYrWU6daTfyPI"><b data-page-node-id="elXfueJk0KqZoKNdrVI0Eh">环境清单</b>：负面环境清理清单与正向环境清单双栏管理。</li><li data-page-node-id="sUIQlvCaFGNiNJhlkYTO5a"><b data-page-node-id="ePEY5dG1L15mViJwxnbMBq">奖励机制</b>：日奖励/月奖励/惩罚三档自定义；完成日关键事→日奖励，完成月项目→月奖励。</li></ul>"
+       data-en="<ul data-page-node-id="DGiNM5oK3pqjC5HZrOJa8Q"><li data-page-node-id="ZO5uMG8e0CvEz3cxyyZdJL"><b data-page-node-id="oji32bcV3jPsEKRUsPhRHC">Accountability partner</b>: partner info, supervision rules, check-in group.</li><li data-page-node-id="Ma8CISHz6aGgOBg5zwcLjx"><b data-page-node-id="bSmQNGF3wggWBPUYNDF0nx">Environment lists</b>: negative items to remove vs positive items to add, managed in two columns.</li><li data-page-node-id="9n1BBlNNl2WfaA6EMMEHtg"><b data-page-node-id="V2Jio43HpQXjTDv5BnadVN">Rewards</b>: daily reward / monthly reward / penalty tiers; finishing daily tasks → daily reward; finishing a monthly project → monthly reward.</li></ul>"></div>
+
+  <h3 data-page-node-id="ByCM0kti1LAmTEqkx5OFqL"><span data-zh="3.6 游戏化面板" data-en="3.6 Gamification Panel" data-page-node-id="bbNfPsGEG8TxF88xNBxT27">3.6 游戏化面板</span> <span class="map" data-zh="对应：原方案·把人生玩成游戏" data-en="Maps to: Play life like a game" data-page-node-id="1kqImpbeVXEpry3HROwDOQ">对应</span></h3>
+  <div data-zh="<ul data-page-node-id="giAPLuzGGO0H1ibkJ2pUhV"><li data-page-node-id="ibflzNmP1NX9pplPMPB8YN">愿景=游戏封面、反愿景=魔珠、年目标=主线任务、月项目=Boss 战（✓ 标记）、每日关键事=每日任务、奖励/惩罚=规则。</li><li>连续完成关键事计为「连击（Combo）」，断签归零，强化损失厌恶。</li></ul>"
+       data-en="<ul><li>Vision = cover art, anti-vision = dark mirror, yearly goal = main quest, monthly project = boss fight (✓ flag), daily tasks = quests, rewards/penalties = rules.</li><li>Consecutive full-completion days form a Streak (Combo) that resets on a miss — loss aversion by design.</li></ul>"></div>
+
+  <h3><span data-zh="3.7 数据与统计" data-en="3.7 Data & Statistics">3.7 数据与统计</span></h3>
+  <div data-zh="<ul><li>打卡热力图（GitHub 风格年度格子，最近 20 周）、关键事完成数、番茄钟累计、复盘次数、连击天数。</li><li>月度项目完成后标记为「Boss 战胜利」，年度页面汇总。</li></ul>"
+       data-en="<ul><li>GitHub-style heatmap (last 20 weeks), key tasks done, pomodoro totals, review count, streak days.</li><li>Finished monthly projects are flagged as boss victories and summarized in the yearly view.</li></ul>"></div>
+
+  <h3><span data-zh="3.8 数据与隐私" data-en="3.8 Data & Privacy">3.8 数据与隐私</span></h3>
+  <div data-zh="<ul><li>纯本地单机：数据存储在本机（localStorage），<b>不联网、不上传</b>。</li><li>支持一键导出/导入备份（JSON）。</li></ul>"
+       data-en="<ul><li>Fully offline: data stored locally (localStorage), <b>no network, no upload</b>.</li><li>One-click JSON backup export/import.</li></ul>"></div>
+
+  <h3><span data-zh="3.9 中英双语（V1.1 新增）" data-en="3.9 Bilingual UI (New in V1.1)">3.9 中英双语（V1.1 新增）</span></h3>
+  <div data-zh="<ul><li>侧边栏一键切换 中文 / English，偏好持久化，全界面（含引导流程、弹窗、toast）即时翻译。</li><li>身份宣言等用户数据保持原文不翻译；维度名等界面词汇随语言切换。</li></ul>"
+       data-en="<ul><li>One-click CN/EN switch in the sidebar; preference persisted; the whole UI (onboarding, dialogs, toasts) translates instantly.</li><li>User content (declarations, goals) stays as written; UI vocabulary translates with the language.</li></ul>"></div>
+</section>
+
+<section>
+  <h2 data-zh="四、界面结构（6 个页面 + 引导）" data-en="4. UI Structure (6 pages + onboarding)">四、界面结构</h2>
+  <table>
+    <tr><th>#</th><th data-zh="页面" data-en="Page">页面</th><th data-zh="内容" data-en="Content">内容</th></tr>
+    <tr><td>1</td><td data-zh="今日驾驶舱（首页）" data-en="Today Cockpit (home)">今日驾驶舱（首页）</td><td data-zh="身份宣言横幅 + 今日关键事 + 番茄钟 + 连击 + 晨间/晚间打卡入口" data-en="Declaration banner + key tasks + pomodoro + streak + ritual/review entries">身份宣言横幅 + 今日关键事 + 番茄钟 + 连击</td></tr>
+    <tr><td>2</td><td data-zh="目标金字塔" data-en="Goal Pyramid">目标金字塔</td><td data-zh="年核心目标（SMART 自检）→ 12 月项目 → 当月 Boss 战" data-en="Yearly goal (SMART) → 12 monthly projects → current boss fight">年核心目标 → 12 月项目 → 当月 Boss 战</td></tr>
+    <tr><td>3</td><td data-zh="愿景与魔镜" data-en="Vision & Mirror">愿景与魔镜</td><td data-zh="身份宣言编辑（五维度校验）+ 反向愿景魔镜卡" data-en="Declaration editor (validation) + anti-vision mirror card">身份宣言编辑 + 魔镜卡</td></tr>
+    <tr><td>4</td><td data-zh="复盘档案" data-en="Review Archive">复盘档案</td><td data-zh="复盘记录 + 热力图 + 统计" data-en="Review records + heatmap + stats">复盘记录 + 热力图 + 统计</td></tr>
+    <tr><td>5</td><td data-zh="支撑体系" data-en="Support System">支撑体系</td><td data-zh="问责伙伴 / 环境清单 / 奖惩规则" data-en="Partner / environment lists / reward rules">问责伙伴 / 环境清单 / 奖惩规则</td></tr>
+    <tr><td>6</td><td data-zh="设置" data-en="Settings">设置</td><td data-zh="语言切换、备份导出导入、引导重置" data-en="Language switch, backup export/import, onboarding reset">语言切换、备份、引导重置</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2 data-zh="五、技术方案" data-en="5. Technical Approach">五、技术方案</h2>
+  <table>
+    <tr><th data-zh="项" data-en="Item">项</th><th data-zh="选型" data-en="Choice">选型</th></tr>
+    <tr><td data-zh="运行时" data-en="Runtime">运行时</td><td>Electron 33 + NSIS 安装包（electron-builder）</td></tr>
+    <tr><td data-zh="界面" data-en="UI">界面</td><td data-zh="单文件 index.html SPA，零外部依赖，离线可用" data-en="Single-file index.html SPA, zero external deps, fully offline">单文件 index.html SPA</td></tr>
+    <tr><td data-zh="数据" data-en="Data">数据</td><td data-zh="localStorage 单对象存储（键名 lifereboot_data_v1），JSON 导出/导入" data-en="Single-object localStorage store (lifereboot_data_v1), JSON export/import">localStorage + JSON 备份</td></tr>
+    <tr><td data-zh="国际化" data-en="i18n">国际化</td><td data-zh="内嵌 zh/en 字典 + data-i18n 属性，无第三方 i18n 库" data-en="Embedded zh/en dictionary + data-i18n attributes, no i18n library">内嵌字典，无第三方库</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2 data-zh="六、版本规划" data-en="6. Roadmap">六、版本规划</h2>
+  <table>
+    <tr><th data-zh="版本" data-en="Version">版本</th><th data-zh="范围" data-en="Scope">范围</th></tr>
+    <tr><td>V1.0</td><td data-zh="身份宣言 + 反向愿景 + 目标金字塔 + 每日关键事 + 番茄钟 + 晚间复盘 + 热力图 + 备份（已发布）" data-en="Declaration + anti-vision + pyramid + daily tasks + pomodoro + review + heatmap + backup (released)">V1.0 全功能</td></tr>
+    <tr><td>V1.1</td><td data-zh="中英双语切换 + 更名 LifeReboot + GitHub 开源准备（当前版本）" data-en="CN/EN bilingual switch + renamed LifeReboot + GitHub open-source readiness (current)">双语 + 更名</td></tr>
+    <tr><td>V1.2</td><td data-zh="规划中：数据看板增强、周报导出" data-en="Planned: dashboard enhancements, weekly report export">看板增强</td></tr>
+    <tr><td>V2.0</td><td data-zh="规划中：开机自启、系统托盘提醒、多设备备份" data-en="Planned: auto-start, tray reminders, multi-device backup">系统集成</td></tr>
+  </table>
+</section>
+
+<footer data-zh="人生从来都不是一场赛跑，而是一场旅行。重要的不是速度，而是方向。—— 本软件的使命：让你每天和昨天的自己比。"
+        data-en="Life is not a race but a journey. What matters is not speed but direction. — LifeReboot's mission: compete only with yesterday's you.">footer</footer>
+</div>
+
+<script>
+function setLang(l){
+  document.getElementById('btnZh').classList.toggle('active', l==='zh');
+  document.getElementById('btnEn').classList.toggle('active', l==='en');
+  document.querySelectorAll('[data-zh]').forEach(el=>{
+    el.innerHTML = l==='zh' ? el.dataset.zh : el.dataset.en;
+  });
+  document.documentElement.lang = l==='zh' ? 'zh-CN' : 'en';
+  localStorage.setItem('lr_spec_lang', l);
+}
+setLang(localStorage.getItem('lr_spec_lang') || 'zh');
+</script>
+</body>
+</html>
